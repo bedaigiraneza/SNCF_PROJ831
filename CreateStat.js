@@ -96,26 +96,6 @@ function refreshText(data,gare1,gare2){
 		.attr("x", 0)
 		.attr("text-anchor","start")
 
-	// emplacement du text 'variation par rapport à 2015'
-	statG.append("text")
-		.attr("id","Variation")
-		.text("Fluctuation 2016/2015:")
-		.attr("y", +d3.select("#Nombredevoyageurs").attr("y")+30)
-		.attr("x", 0)
-		.attr("text-anchor","start")
-};
-// emplacement du text 'Divertissement'
-statG.append("text")
-    .attr("id","Divertissements")
-    .text("Entertainment:")
-    .attr("y", y_divertissements+18)
-    .attr("x", 0)
-    .attr("text-anchor","start")
 
-// emplacement du text "Moyens d'acces"
-statG.append("text")
-    .text("How to get there?")
-    .attr("y", y_acces+18)
-    .attr("x", 0)
-    .attr("text-anchor","start");
+};
 
