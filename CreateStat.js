@@ -133,3 +133,26 @@ function refreshText(data,gare1,gare2){
 			.attr("x", +d3.select("#Variation").attr("x")+170)
 			.style("text-anchor","start")
 };
+
+    // emplacement du rang pour la gare 1
+    statG.append("text")
+        .attr("id","valeur_rang")
+        .attr("y", +d3.select("#Nombredevoyageurs").attr("y"))
+        .attr("x", function(){return +d3.select("#valeur_voyageurs").attr("x")+50})
+        .style("text-anchor","start")
+
+    // emplacement du rang de variation pour la gare 1
+    statG.append("text")
+        .attr("id","valeur_rangvar")
+        .attr("y", +d3.select("#Variation").attr("y"))
+        .attr("x", function(){return +d3.select("#valeur_variation").attr("x")+50})
+        .style("text-anchor","start")
+
+    // emplacement du nom de la gare 1
+    statG.append("text")
+        .attr("id","nom1")
+        .attr("y", +d3.select("#nom").attr("y"))
+        .attr("x", +d3.select("#nom").attr("x")+170)
+        .attr("text-anchor","start")
+        .style("font-weight","bold")
+};
