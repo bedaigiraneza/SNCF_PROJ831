@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>Stations comparison</title>
+    <script src="node_modules/d3/build/d3.min.js"></script>
+    <script src="CreateStat.js" charset="utf-8"></script>
+    <script src="CreateGlyph.js" charset="utf-8"></script>
+    <script src="radarchart.js" charset="utf-8"></script>
+
+    <style>
+        body {margin: 0; position: fixed; top: 0; right: 0; bottom: 0; left: 0; font-family: Arial;}
+        p {margin: 0; padding: 0}
+        .choiceZone {display: inline-block; margin: 2px;}
+        .hidden {display: none;}
+        div.tooltip {color: #222; background-color: #fff; padding: .5em; text-shadow: #f5f5f5 0 1px 0; border-radius: 2px; opacity: 0.9; position: absolute;}
+        rect {opacity: 1;}
+        .titre {font-weight: bold; font-size: 1.3em;}
+    </style>
+</head>
+
+<body>
+<div id="firstColumn" style="display: inline-block; float: left; height: 100%; width: 665px; padding-left: 15px;">
+    <div id="mapZone"></div>
+    <div class="choiceZone" style="font-size: 0.8em; width: 100%">
+        <p><strong style="text-align: left">Show only the stations that have:</strong></p>
+        <p>
+            <label>Wifi<input type="checkbox" name="wifi" value="true"></label>
+            <label style="margin-left: 20px">Football table<input type="checkbox" name="foosball"></label>
+            <label style="margin-left: 20px">Power station(s)<input type="checkbox" name="powerstation"></label>
+            <label style="margin-left: 20px">Piano(s)<input type="checkbox" name="piano"></label>
+            <label style="margin-left: 20px">Distributor(s) of short stories<input type="checkbox" name="stories"></label>
+        </p>
+        <p><button type="button" name="clearFilters" style="margin-top: 4px; display: none;">Clear all filters</button>&nbsp;</p>
+        <br/>
+    </div>
+</div>
+<div id="separation" style="display: inline-block; float: left; height: 100%; width: 4px; background-color: grey;"></div>
+<div id="secondColumn" style="display: inline-block; float: left; height: 100%; width: 660px; padding-left: 15px;">
+    <div id = "start" style="height: 100%; width: 100%"><p class="titre" style="margin-top: 40%; text-align: center;">Please select 1 or 2 station(s)</p></div>
+    <div id ="stat" style="display: none;"></div>
+    <div id = "barChart" style="display: none;"></div>
+    <div id ="radarChart" style="display: none;"></div>
+</div>
+<script>
+    var statSvg = d3.select("#stat").append("svg")
+        .attr("id","statSvg")
+        .attr("width", 700)
+        .attr("height", 400);
