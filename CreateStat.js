@@ -71,3 +71,20 @@ function pushInfo(d,divertissements,acces,motif){
 		loisirs: +d.Loisirs_vacances_visite_d_un_proche_ou_ami
 	});
 };
+function refreshText(data,gare1,gare2){
+    //titre
+    statG.append("text")
+        .attr("class","titre")
+        .attr("id","caracteristiques")
+        .attr("y", 0)
+        .attr("x", 0)
+        .text("Features");
+
+    // emplacement du texte 'nom des gares'
+    statG.append("text")
+        .attr("id","nom")
+        .text("Name:")
+        .attr("y", +d3.select("#caracteristiques").attr("y")+30)
+        .attr("x", 0)
+        .attr("text-anchor","start");
+
