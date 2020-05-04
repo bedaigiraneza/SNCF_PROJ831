@@ -43,3 +43,31 @@ function CreateStat(data, gare1, gare2) {
 		else if(gare2==null){d3.selectAll("rect").style("fill",couleur1);}  ;       
 	};
 };
+// Définition des fonctions
+function pushInfo(d,divertissements,acces,motif){
+	divertissements.push({
+		wifi: d.Wifi,
+		baby_foot: d.Baby_Foot,
+		powerstation: d.Power_Station,
+		piano: d.Piano,
+		histoires: d.Distr_Histoires_Courtes
+	});
+
+	acces.push({
+		voiture: +d.deux_roues_motorisees + +d.Autres_voitures_location_autopartage + +d.Voiture_Conducteur + +d.Voiture_passager,
+		taxis: +d.Taxis,
+		bus: +d.Bus_Car_Navette,
+		metro: +d.Metro_RER,
+		tram: +d.Tramway,
+		marche: +d.Marche,
+		velo: +d.Velo
+	});
+
+	motif.push({
+		divers: +d.Demarches_administratives_medicales_ou_achat,
+		commute: +d.Deplacement_domicile_travail_habituel,
+		etudes: +d.Deplacement_domicile_etude_y_compris_stage,
+		occasionnel: +d.Deplacement_professionnel_occasionnel,
+		loisirs: +d.Loisirs_vacances_visite_d_un_proche_ou_ami
+	});
+};
