@@ -119,4 +119,16 @@ function refreshText(data,gare1,gare2){
         .attr("y", y_acces+18)
         .attr("x", 0)
         .attr("text-anchor","start");
+	if (gare1 != null) {
+		statG.append("text")
+			.attr("id","valeur_voyageurs")
+			.attr("y", +d3.select("#Nombredevoyageurs").attr("y"))
+			.attr("x", +d3.select("#Nombredevoyageurs").attr("x")+170)
+			.attr("text-anchor","start")
+
+		statG.append("text")
+			.attr("id","valeur_variation")
+			.attr("y", +d3.select("#Variation").attr("y"))
+			.attr("x", +d3.select("#Variation").attr("x")+170)
+			.style("text-anchor","start")
 };
