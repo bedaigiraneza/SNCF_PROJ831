@@ -248,3 +248,36 @@ data.forEach(function(d){
 		;}
 	;})
 ;}
+
+function refreshWifi(div1,div2,i){
+	creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_wifi",function(){if(div1[i][1]=='true'){return couleur1}else{return couleur3}})
+
+	creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_wifi2",function(){if(div2[i][1]=='true'){return couleur2}else{return couleur3}})
+
+	var svg_wifi = statG.append("svg")
+
+	svg_wifi
+		.attr("preserveAspectRatio","xMidYMid meet")
+		.attr("viewBox","0 0 550 550")
+		.attr("width",h_rect)
+		.attr("height",h_rect)
+
+	svg_wifi.append("path")
+		.attr("id","path_wifi")
+		.attr("d","M0,146.93c2.44-6.87,7.4-11.36,13.32-15.39C68,94.27,127.92,70,193.55,60.83c112-15.68,214.64,8.85,308,72.69A29,29,0,0,1,512,146.93v9c-3.81,9-9.67,15.3-20.35,15.28-4.91,0-9-2-12.87-4.72-41-28.73-85.82-49.46-134.72-60.22Q177,69.54,34.84,165.37c-4.16,2.81-8.22,5.57-13.52,5.8C10.17,171.67,4,165.34,0,155.93v-9Z")
+
+	svg_wifi.append("path")
+		.attr("id","path_wifi")
+		.attr("d","M422.62,249.08c-4.29.19-8.32-1.53-12.11-4.18-36.07-25.25-75.92-41.14-119.59-46.63q-93.66-11.77-174.76,37.07c-5.13,3.09-10,6.52-15,9.8-10.2,6.68-22.21,4.66-28.6-4.82s-4-21.09,5.88-28C117.56,184.87,160.66,167,208,159.86c79.81-12,153.39,4.53,220.69,49.05a74.62,74.62,0,0,1,7.3,5.23,19.67,19.67,0,0,1,5.62,22.23C438.69,244.07,431.42,249,422.62,249.08Z")
+
+	svg_wifi.append("path")
+		.attr("id","path_wifi")
+		.attr("d","M353.72,327a19.38,19.38,0,0,1-11.64-3.81c-29.65-20.36-62.49-28.94-98.27-26.26a145.19,145.19,0,0,0-72.55,25.41c-6.16,4.23-12.59,6.1-19.76,3.52-7.75-2.79-12.28-8.56-13.24-16.64s2.33-14.31,8.86-18.88a178.83,178.83,0,0,1,65.23-28.79c54.58-11.77,105.41-2.86,152,28.45,8.2,5.51,11.31,14.2,8.6,23A20,20,0,0,1,353.72,327Z")
+
+	svg_wifi.append("path")
+		.attr("id","path_wifi")
+		.attr("d","M256.44,355.87A49.92,49.92,0,0,1,306,406.06c-0.08,27.33-22.74,49.8-50.13,49.7a50.15,50.15,0,0,1-49.77-50.55C206.23,377.84,228.79,355.75,256.44,355.87Z")
+
+	svg_wifi.attr("x",d3.select("#valeur_wifi").attr("x"))
+	svg_wifi.attr("y",d3.select("#valeur_wifi").attr("y"))
+}
