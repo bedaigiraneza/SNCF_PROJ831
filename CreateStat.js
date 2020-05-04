@@ -88,14 +88,20 @@ function refreshText(data,gare1,gare2){
         .attr("y", +d3.select("#caracteristiques").attr("y")+30)
         .attr("x", 0)
         .attr("text-anchor","start");
-// emplacement du text 'nombre de voyageurs'
+
+    // emplacement du text 'nombre de voyageurs'
 	statG.append("text")
 		.attr("id","Nombredevoyageurs")
-		.text("Travellers in 2016:")
+		.text("Travellers in 2019:")
 		.attr("y", +d3.select("#nom").attr("y")+30)
 		.attr("x", 0)
 		.attr("text-anchor","start")
 
-
+	// emplacement du text 'variation par rapport à 2018'
+	statG.append("text")
+		.attr("id","Variation")
+		.text("Fluctuation 2018/2019:")
+		.attr("y", +d3.select("#Nombredevoyageurs").attr("y")+30)
+		.attr("x", 0)
+		.attr("text-anchor","start")
 };
-
