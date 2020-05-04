@@ -319,3 +319,23 @@ function refreshBaby(div1,div2,i){
         .attr("stroke","black")
         .attr("stroke-width","2")
 }
+function refreshPower(div1,div2,i){
+
+    creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_powerstation",function(){if(div1[i][1]>0){return couleur1}else{return couleur3}})
+
+    creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_powerstation2",function(){if(div2[i][1]>0){return couleur2}else{return couleur3}})
+
+    var svg_power = statG.append("svg")
+
+    svg_power.attr("preserveAspectRatio","xMidYMid meet")
+        .attr("viewBox","-6 10 80 80")
+        .attr("width",h_rect)
+        .attr("height",h_rect)
+
+    svg_power.append("path")
+        .attr("id","path_power")
+        .attr("d","M80.6,54.5c0,1.7-1.4,3.2-3.2,3.2h-9.2c-4.4,0-7.9,3.5-7.9,7.9v0.1c0,8-6.7,14.5-14.7,14.2C38,79.6,32,73,32,65.3v-6.7  c-7.2-1.5-12.6-7.8-12.6-15.5v-8c0-1.1,0.9-2.1,2.1-2.1h3.9v-10c0-1.7,1.5-3.1,3.2-2.9c1.5,0.1,2.7,1.5,2.7,3.1v9.9h7.8v-10  c0-1.7,1.5-3.1,3.3-2.9c1.5,0.1,2.7,1.5,2.7,3.1v9.9h3.9c1.1,0,2,0.9,2,2v8c0,7.6-5.4,14-12.6,15.5v7c0,4.7,4.1,8.4,8.9,7.8  c4-0.5,6.9-4.1,6.9-8.1c0-7.7,6.3-14,14.1-14h9.3C79.2,51.3,80.6,52.8,80.6,54.5z")
+
+    svg_power.attr("x",d3.select("#valeur_powerstation").attr("x"))
+    svg_power.attr("y",d3.select("#valeur_powerstation").attr("y"))
+}
