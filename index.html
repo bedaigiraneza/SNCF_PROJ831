@@ -88,3 +88,22 @@
 
     var projection = d3.geoConicConformal().center([2.454071, 46.279229]).scale(2800)
         .translate([width/2.3, height/1.8]);
+
+    var path = d3.geoPath()
+        .projection(projection);
+
+    var radiusScale = d3.scaleQuantile()
+        .range([2,3,4,6,7,9]);
+
+    var negColorScale = d3.scaleQuantile()
+        .range(["rgb(255, 0, 0)","rgb(255, 86, 86)","rgb(255, 166, 166)","rgb(255, 224, 224)"]);
+
+    var posColorScale = d3.scaleQuantile()
+        .range(["rgb(177, 236, 177)","rgb(124, 192, 124)","rgb(68, 162, 68)","rgb(0, 128, 0)"]);
+
+    function colorQuantile(variation) {
+        if (variation<0){return negColorScale(variation); }
+        else if (variation>0) {return posColorScale(variation); }
+        else {return "white"; };
+    };
+	
