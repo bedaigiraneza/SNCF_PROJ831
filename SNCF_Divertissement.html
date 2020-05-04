@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <style>
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0;font-family : 'Arial'; font-size: 15}
+    rect { opacity:1;}
+  </style>
+</head>
+
+<body>
+<div>
+  <script>
+    // Feel free to change or delete any of the code you see in this editor!
+    var margin = {top : 20,left: 0, right: 20, bottom: 20}
+    
+    var svg = d3.select("body").append("svg")
+      .attr("width", 960)
+      .attr("height", 500);
+
+    // gare 1 selectionnée virtuellement 
+    var gare1 = 713040; //384008 //713040//  
+    // gare 2 selectionnée virtuellement
+    var gare2 = 384008; //172007
+    
+    var w_rect = 18;
+    var h_rect = 36;
+    var x_divertissements1= 220;
+    var x_divertissements2= x_divertissements1+w_rect;
+    var y_divertissements = 95;
+    var y_acces = 160;
+    
+    var couleur1 = 'green';
+    var couleur2 =	'yellow';
+    var couleur3 = 'lightgrey';
+    
+ 		// définition des dimensions globalisées des carrés
+    
+		var histo_acces = svg.append("g");
+    
+    var div = d3.select("body").append("div")	
+    .attr("class", "tooltip")
+    .attr("width","50px")
+    //.style("position","absolute")
+    .style("display","inlineblock")
+    .style("background-color","white")
+    .style("border","1px solid grey")
+    .style("border-radius","10px")
+    .style("opacity", 0);
+ 	
+
+// début csv
+d3.csv("all-joined-datasets.csv",function(data){
+
+  var divertissements1 = [{uic: gare1}] //json avec les divertissements en gare1
+  var divertissements2 = [{uic: gare2}] //json avec les divertissements en gare2
+  
+  var acces1 = [{uic: gare1}] //json avec les moyens d'acces en gare1
+  var acces2 = [{uic: gare2}] //json avec les moyens d'acces en gare2
+  
+  var motif1 = [{uic: gare1}] //json avec les motif d'arrivé en gare1
+  var motif2 = [{uic: gare2}] //json avec les motif d'arrivé en gare2
+  
+  //parcour des données
+  data.forEach(function(d){
+    // text
+    d.variation = (+d.voyageurs_2016-+d.voyageurs_2015)/(d.voyageurs_2015)
+
+	if(d.Code_UIC == gare1){
+		divertissements1.push({wifi: d.Wifi,
+													 baby_foot: d.Baby_Foot,
+													 powerstation: d.Power_Station,
+													 piano: d.Piano,
+													 histoires: d.Distr_Histoires_Courtes})
+    
+    acces1.push({voiture: +d.deux_roues_motorisees + +d.Autres_voitures_location_autopartage + +d.Voiture_Conducteur + +d.Voiture_passager,
+                 taxis: +d.Taxis,
+    						 bus: +d.Bus_Car_Navette,
+                 metro: +d.Metro_RER,
+                 tram: +d.Tramway,
+    						 marche: +d.Marche,
+    						 velo: +d.Velo})
+    
+    motif1.push({divers: +d.Demarches_administratives_medicales_ou_achat,
+                 commute: +d.Deplacement_domicile_travail_habituel,
+                 etudes: +d.Deplacement_domicile_etude_y_compris_stage,
+    						 occasionnel: +d.Deplacement_professionnel_occasionnel,
+   							 loisirs: +d.Loisirs_vacances_visite_d_un_proche_ou_ami})
+  }  
+	if(d.Code_UIC == gare2){
+		divertissements2.push({wifi: d.Wifi,
+													 baby_foot: d.Baby_Foot,
+													 powerstation: d.Power_Station,
+													 piano: d.Piano,
+													 histoires: d.Distr_Histoires_Courtes})
+    
+    acces2.push({voiture: +d.deux_roues_motorisees + +d.Autres_voitures_location_autopartage + +d.Voiture_Conducteur + +d.Voiture_passager,
+                 taxis: +d.Taxis,
+    						 bus: +d.Bus_Car_Navette,
+                 metro: +d.Metro_RER,
+                 tram: +d.Tramway,
+    						 marche: +d.Marche,
+    						 velo: +d.Velo})
+    
+    motif2.push({divers: +d.Demarches_administratives_medicales_ou_achat,
+                 commute: +d.Deplacement_domicile_travail_habituel,
+                 etudes: +d.Deplacement_domicile_etude_y_compris_stage,
+    						 occasionnel: +d.Deplacement_professionnel_occasionnel,
+   							 loisirs: +d.Loisirs_vacances_visite_d_un_proche_ou_ami})
+  }
+	})
+  </script>
+</div>
+</body>
