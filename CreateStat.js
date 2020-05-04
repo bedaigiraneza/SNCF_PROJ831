@@ -192,4 +192,59 @@ if (gare2 != null) {
 		.attr("x",function(){return +d3.select("#valeur_variation2").attr("x")+50})
 		.style("text-anchor","start")
 };
+data.forEach(function(d){
+	if(d.Code_UIC == gare1){
+		var mon_text1 = ""
+		if(d.Variations>0){mon_text1 = "+"}
 
+		d3.select("#valeur_rang")
+			.text("(#"+ d.RangNbVoy +")")
+			.attr("fill",couleur1);
+
+		d3.select("#valeur_rangvar")
+			.text("(#"+ d.RangVariations +")")
+			.attr("fill",couleur1);
+
+		d3.select("#valeur_voyageurs")
+			.text(d3.format(".3s")(d.voyageurs_2016))
+			.attr("fill",couleur1);
+
+		d3.select("#valeur_variation")
+
+			.text(mon_text1+d3.format(".1%")(d.Variations))
+			.attr("fill",couleur1);
+
+		d3.select("#nom1")
+			.text(d.Nom_de_la_gare)
+			.attr("fill",couleur1);
+
+	};
+
+	if(d.Code_UIC == gare2){
+		var mon_text2 = ""
+		if(d.Variations>0){mon_text2 = "+"}
+
+		d3.select("#valeur_rang2")
+			.text("(#"+(d.RangNbVoy)+")")
+			.attr("fill",couleur2)
+
+		d3.select("#valeur_rangvar2")
+			.text("(#"+(d.RangVariations)+")")
+			.attr("fill",couleur2)
+
+		d3.select("#valeur_voyageurs2")
+			.text(d3.format(".3s")(d.voyageurs_2016))
+			.attr("fill",couleur2)
+
+		d3.select("#valeur_variation2")
+
+			.text(mon_text2+d3.format(".1%")(d.Variations))
+			.attr("fill",couleur2)
+
+		d3.select("#nom2")
+			.text(d.Nom_de_la_gare)
+			.attr("fill",couleur2)
+
+		;}
+	;})
+;}
