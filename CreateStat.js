@@ -71,6 +71,7 @@ function pushInfo(d,divertissements,acces,motif){
 		loisirs: +d.Loisirs_vacances_visite_d_un_proche_ou_ami
 	});
 };
+
 function refreshText(data,gare1,gare2){
     //titre
     statG.append("text")
@@ -87,4 +88,19 @@ function refreshText(data,gare1,gare2){
         .attr("y", +d3.select("#caracteristiques").attr("y")+30)
         .attr("x", 0)
         .attr("text-anchor","start");
+// emplacement du text 'nombre de voyageurs'
+	statG.append("text")
+		.attr("id","Nombredevoyageurs")
+		.text("Travellers in 2016:")
+		.attr("y", +d3.select("#nom").attr("y")+30)
+		.attr("x", 0)
+		.attr("text-anchor","start")
 
+	// emplacement du text 'variation par rapport à 2015'
+	statG.append("text")
+		.attr("id","Variation")
+		.text("Fluctuation 2016/2015:")
+		.attr("y", +d3.select("#Nombredevoyageurs").attr("y")+30)
+		.attr("x", 0)
+		.attr("text-anchor","start")
+};
