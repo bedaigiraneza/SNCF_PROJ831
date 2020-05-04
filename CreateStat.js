@@ -119,6 +119,7 @@ function refreshText(data,gare1,gare2){
         .attr("y", y_acces+18)
         .attr("x", 0)
         .attr("text-anchor","start");
+
 	if (gare1 != null) {
 		statG.append("text")
 			.attr("id","valeur_voyageurs")
