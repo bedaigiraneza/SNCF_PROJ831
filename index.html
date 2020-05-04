@@ -46,3 +46,45 @@
         .attr("id","statSvg")
         .attr("width", 700)
         .attr("height", 400);
+
+    var statG = statSvg.append("g")
+        .attr("id","statG")
+        .attr("transform","translate(0,30)");
+
+    var motifSvg = d3.select("#barChart").append("svg")
+        .attr("id","motifSvg")
+        .attr("width", 350)
+        .attr("height",340);
+
+    var motifG = motifSvg.append("g")
+        .attr("id","histo_motif")
+        .attr("transform","translate(30,50)");
+
+    var couleur1 = "#41A9E1",
+        couleur2 = "#FF8C00",
+        couleur3 = "#D3D3D3",
+        w_rect = 18,
+        h_rect = 36,
+        x_divertissements1 = 220,
+        x_divertissements2= x_divertissements1 + w_rect,
+        y_divertissements = 125,
+        y_acces = 190;
+
+    var width = 650,
+        height = 470;
+
+    var svg = d3.select("#mapZone")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    svg.append("text")
+        .attr("class","titre")
+        .attr("y",30)
+        .text("Selection of station(s)");
+
+    var tooltip = d3.select("#firstColumn").append("div")
+        .attr("class", "hidden tooltip");
+
+    var projection = d3.geoConicConformal().center([2.454071, 46.279229]).scale(2800)
+        .translate([width/2.3, height/1.8]);
