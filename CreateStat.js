@@ -156,3 +156,18 @@ function refreshText(data,gare1,gare2){
         .attr("text-anchor","start")
         .style("font-weight","bold")
 };
+
+if (gare2 != null) {
+    // emplacement du nom de la gare 2
+    statG.append("text")
+        .attr("id","nom2")
+        .attr("y", +d3.select("#nom").attr("y"))
+        .attr("x", +d3.select("#nom").attr("x")+460)
+        .attr("text-anchor","start")
+        .style("font-weight","bold")
+
+    statG.append("text")
+        .attr("id","valeur_voyageurs2")
+        .attr("y", +d3.select("#Nombredevoyageurs").attr("y"))
+        .attr("x", +d3.select("#Nombredevoyageurs").attr("x")+460)
+        .attr("text-anchor","start")
