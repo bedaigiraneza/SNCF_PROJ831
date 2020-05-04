@@ -171,3 +171,25 @@ if (gare2 != null) {
         .attr("y", +d3.select("#Nombredevoyageurs").attr("y"))
         .attr("x", +d3.select("#Nombredevoyageurs").attr("x")+460)
         .attr("text-anchor","start")
+
+	statG.append("text")
+		.attr("id","valeur_variation2")
+		.attr("y", +d3.select("#Variation").attr("y"))
+		.attr("x", +d3.select("#Variation").attr("x")+460)
+		.style("text-anchor","start")
+
+	// emplacement du rang pour la gare 2
+	statG.append("text")
+		.attr("id","valeur_rang2")
+		.attr("y", +d3.select("#Nombredevoyageurs").attr("y"))
+		.attr("x",function(){return +d3.select("#valeur_voyageurs2").attr("x")+50})
+		.style("text-anchor","start")
+
+	// emplacement du rang de variation pour la gare 2
+	statG.append("text")
+		.attr("id","valeur_rangvar2")
+		.attr("y", +d3.select("#Variation").attr("y"))
+		.attr("x",function(){return +d3.select("#valeur_variation2").attr("x")+50})
+		.style("text-anchor","start")
+};
+
