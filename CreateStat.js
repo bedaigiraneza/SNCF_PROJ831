@@ -446,3 +446,26 @@ function refreshBus(acc1,acc2,i){
     svg_bus.attr("x",d3.select("#valeur_bus").attr("x"))
     svg_bus.attr("y",d3.select("#valeur_bus").attr("y"))
 }
+
+//Fonction pour la gestion de Metro
+function refreshMetro(acc1,acc2,i){
+    creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_acces,"valeur_metro",function(){if(acc1[i][1]>0){return couleur1}else{return couleur3}})
+
+    creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_acces,"valeur_metro2",function(){if(acc2[i][1]>0){return couleur2}else{return couleur3}})
+
+    var svg_metro = statG.append("svg")
+
+    svg_metro
+        .attr("preserveAspectRatio","xMidYMid meet")
+        .attr("viewBox","-5 0 165 165")
+        .attr("width",h_rect)
+        .attr("height",h_rect)
+
+    svg_metro.append("path")
+        .attr("id","path_metro")
+        .attr("d","M160,80.405C160,36,122.802-0.002,80.202-0.002C36.003-0.002,0,36,0,80.405    C0,124.404,36.003,160,80.202,160C124.401,160,160,124.604,160,80.405z M149,80.405c0,37.6-30.994,68.998-68.799,68.998    c-38.002,0-69.203-31.001-69.203-68.998c0-38.21,31.201-69.802,69.203-69.802C118.006,10.604,149,42.404,149,80.405z     M119.802,115.804V46c0-4.001-2.197-8.201-8.797-8.201c-5,0-7.002,2.199-9.204,6.601L80.202,89.403h-0.205l-21.79-45.004    c-2.205-4.401-4.208-6.601-9.207-6.601c-6.602,0-8.799,4.2-8.799,8.201v69.804c0,3.799,3.002,6.002,6.601,6.002    c3.206,0,6.798-2.203,6.798-6.002V63.803h0.203l19.801,40.398c1.397,2.799,3.197,4.399,6.395,4.399    c3.204,0,5.002-1.601,6.401-4.399l19.808-40.398h0.198v52.001c0,3.799,3.595,6.002,6.801,6.002    C116.799,121.806,119.802,119.603,119.802,115.804z")
+        .style("fill","black")
+
+    svg_metro.attr("x",d3.select("#valeur_metro").attr("x"))
+    svg_metro.attr("y",d3.select("#valeur_metro").attr("y"))
+}
