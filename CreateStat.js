@@ -469,3 +469,25 @@ function refreshMetro(acc1,acc2,i){
     svg_metro.attr("x",d3.select("#valeur_metro").attr("x"))
     svg_metro.attr("y",d3.select("#valeur_metro").attr("y"))
 }
+
+//Fonction pour la gestion de tramway
+function refreshTram(acc1,acc2,i){
+    creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_acces,"valeur_tram",function(){if(acc1[i][1]>0){return couleur1}else{return couleur3}})
+
+    creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_acces,"valeur_tram2",function(){if(acc2[i][1]>0){return couleur2}else{return couleur3}})
+
+    var svg_tram = statG.append("svg")
+
+    svg_tram
+        .attr("preserveAspectRatio","xMidYMid meet")
+        .attr("viewBox","0 0 165 165")
+        .attr("width",h_rect)
+        .attr("height",h_rect)
+
+    svg_tram.append("path")
+        .attr("id","path_tram")
+        .attr("d","M160,80.205C160,35.801,124.204,0,79.803,0C35.602,0,0,35.801,0,80.205C0,124.406,35.602,160,79.803,160    C124.204,160,160,124.406,160,80.205z M148.199,80.205c0,37.592-30.596,67.996-68.396,67.996c-37.602,0-68-30.404-68-67.996    c0-37.803,30.398-68.404,68-68.404C117.603,11.801,148.199,42.402,148.199,80.205z M117.406,48.404    c0-3.201-2.003-6.201-5.604-6.201H48.403c-3.599,0-5.604,3-5.604,6.201c0,2.799,2.005,6.199,5.604,6.199h24.401v65.6    c0,3.596,3.804,5.6,7.195,5.6c3.8,0,7.407-2.004,7.407-5.6v-65.6h24.396C115.402,54.604,117.406,51.203,117.406,48.404z")
+        .style("fill","black")
+    svg_tram.attr("x",d3.select("#valeur_tram").attr("x"))
+    svg_tram.attr("y",d3.select("#valeur_tram").attr("y"))
+}
