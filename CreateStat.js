@@ -753,3 +753,31 @@ function refreshAcces(acc1,acc2,gare1,gare2){
         if(new_acc1[indice][0]=='velo'){refreshVelo(new_acc1,new_acc2,indice)}
 
     };
+
+    // TRAITEMENT INFOS MANQUANTES
+
+    var sum1 = 0,
+        sum2 = 0;
+
+    for(var n=0;n<new_acc1.length;n++){
+        sum1+=new_acc1[n][1]
+        sum2+=new_acc2[n][1]
+    };
+
+    if(sum1==0 || sum2==0){
+        var g_infos = statG.append("g")
+        var chiffre = ""
+        if(sum1==0 && gare1!=null){chiffre= "1"}
+        if(sum2==0 && gare2!=null){chiffre= "2"}
+        if(sum1==0 && gare1!=null && sum2==0 && gare2!=null){chiffre="1 & station #2"}
+
+        g_infos.append("text")
+            .text("Les données manquantees"+ chiffre)
+            .attr("class","debutphrase")
+            .attr("x",x_divertissements1)
+            .attr("y",y_acces+45)
+            .attr("font-size",10)
+            .style("font-style","italic")
+            .style("text-anchor","start")
+    };
+;}
