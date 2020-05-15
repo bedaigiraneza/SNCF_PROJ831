@@ -438,7 +438,7 @@
                     var mouse = d3.mouse(svg.node()).map(function(d) {return parseInt(d); });
                     tooltip.classed("hidden", false)
                         .attr("style", "left:" + (mouse[0] + 30) + "px; top:" + (mouse[1] - 35) + "px; border: 2px solid "+colorInteraction())
-                        .html("<p><strong>"+d.name+"</strong></p><p>Department: "+d.county+"</p><p>Region: "+d.region+"</p>");
+                        .html("<p><strong>"+d.name+"</strong></p><p>Departement: "+d.county+"</p><p>Region: "+d.region+"</p>");
                 })
                 .on("mouseenter", function(){
                     d3.select(this).transition().attr("fill", colorInteraction());
