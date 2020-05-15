@@ -429,50 +429,42 @@
 
             var gare = gares.selectAll("circle").data(nodes);
 
-            var legend = svg.append("g")
-                .attr("class","legend")
-                .attr("transform", function(d) {return "translate(" + (width -150) + "," + 60 + ")"; });
-
-            var legendRadius = legend.append("g").attr("id","radius");
-
-            legendRadius.append("text").attr("style","font-size: 0.8em; font-weight: bold;").text("Travallers in 2016:");
-
-            var eachRadius = legendRadius.selectAll("g")
-                .data(radiusScale.range().reverse())
-                .enter()
-                .append("g")
-                .attr("transform", function(d,i) {return "translate(" + 15 + "," + (20+i*20) +")"; });
-
-            eachRadius.append("circle")
-                .attr("fill", "white")
-                .style("stroke", "black")
-                .attr("cx", 0)
-                .attr("cy", 0)
-                .attr("r", function(d) {return d; });
-
-            var quantilesRadius = [];
-            var numberOfIntervalsRadius = radiusScale.range().length;
-            for (i=0; i<numberOfIntervalsRadius+1; i++){
-                quantilesRadius.push(d3.quantile(radiusScale.domain(),i/numberOfIntervalsRadius));
-            };
-            quantilesRadius.reverse();
-
-            eachRadius.append("text")
-                .attr("transform", function(d,i) {return "translate(" + 15 + ",3)"; })
-                .attr("style","font-size: 0.7em;")
-                .text(function(d,i) {return "From "+d3.format(".2s")(quantilesRadius[i+1])+" to "+d3.format(".2s")(quantilesRadius[i]); } );
-
-            eachRadius
-                .on("mouseenter", function(d){
-                    legendRadius.selectAll("g").filter(function(e){return (e !== d); }).transition().style("opacity", 0.08);
-                    gares.selectAll("circle").filter(function(e){return (e.radius !== d); })
-                        .transition().style("opacity", 0.08);
+            gare.enter()
+                .append("circle")
+                .attr("r", function(d) {return d.radius; })
+                .style("stroke","black")
+                .attr("fill", function(d) {return colorQuantile(d.variation); })
+                .on("mousemove", function(d) {
+                    var mouse = d3.mouse(svg.node()).map(function(d) {return parseInt(d); });
+                    tooltip.classed("hidden", false)
+                        .attr("style", "left:" + (mouse[0] + 30) + "px; top:" + (mouse[1] - 35) + "px; border: 2px solid "+colorInteraction())
+                        .html("<p><strong>"+d.name+"</strong></p><p>Department: "+d.county+"</p><p>Region: "+d.region+"</p>");
                 })
-                .on("mouseleave", function(d){
-                    legendRadius.selectAll("g").transition().style("opacity", 1);
-                    var selection = gares.selectAll("circle").filter(function(e){return (e.radius !== d); })
-                    showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox);
-                });
+                .on("mouseenter", function(){
+                    d3.select(this).transition().attr("fill", colorInteraction());
+                })
+                .on("mouseleave", function(){
+                    d3.select(this).transition().attr("fill", function(d){return colorQuantile(d.variation); }).style("stroke-width", 1);
+                    tooltip.classed("hidden", true);
+                })
+                .on("click", function(d){
+                    showStats();
+                    if (gare1) {
+                        gare2 = d.code;
+                        var secondStationName = getName(nodes, gare2);
+                        secondDropdown.property("value", secondStationName);
+                        secondStationChange(data, gare1, gare2);
+                    }
+                    else {
+                        gare1 = d.code;
+                        var firstStationName = getName(nodes, gare1);
+                        firstDropdown.property("value", firstStationName);
+                        firstStationChange(data, gare1, gare2);
+                    }
+                })
+                .merge(gare)
+                .attr("cx", function(d) {return d.x; })
+                .attr("cy", function(d) {return d.y; });
 
             var legendColor = legend.append("g").attr("id","colorQuantile").attr("transform","translate(0,"+20*(numberOfIntervalsRadius+3)+")");
 
