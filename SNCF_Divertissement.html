@@ -137,6 +137,35 @@ d3.csv("all-joined-datasets.csv",function(data){
   ;
 
 })
+    // Définition des fonctions
+
+    function refreshText(data,gare1,gare2){
+
+        // emplacement du text 'nom des gares'
+        svg.append("text")
+            .attr("id","nom")
+            .text("Nom des gares")
+            .attr("y", 0 + margin.top)
+            .attr("x", 0 + margin.left)
+            .attr("text-anchor","start")
+
+        // emplacement du nom de la gare 1
+        svg.append("text")
+            .attr("id","nom1")
+            .text("")
+            .attr("y", 0 + margin.top)
+            .attr("x", function(){return d3.select("#nom").attr("x")+275})
+            .attr("text-anchor","end")
+
+        // emplacement du nom de la gare 2
+        svg.append("text")
+            .attr("id","nom2")
+            .text("")
+            .attr("y", 0 + margin.top)
+            .attr("x", function(){return d3.select("#nom").attr("x")+350})
+            .attr("text-anchor","start")
+
+
   </script>
 </div>
 </body>
