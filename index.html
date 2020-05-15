@@ -98,25 +98,29 @@
     var negColorScale = d3.scaleQuantile()
         .range(["rgb(255, 0, 0)","rgb(255, 86, 86)","rgb(255, 166, 166)","rgb(255, 224, 224)"]);
 
+    var posColorScale = d3.scaleQuantile()
+        .range(["rgb(177, 236, 177)","rgb(124, 192, 124)","rgb(68, 162, 68)","rgb(0, 128, 0)"]);
 
-
-    function transitionStrokeWidth(element) {
-        element
-            .transition().duration(400).style("stroke-width", 10)
-            .transition().style("stroke-width", 1);
+    function colorQuantile(variation) {
+        if (variation<0){return negColorScale(variation); }
+        else if (variation>0) {return posColorScale(variation); }
+        else {return "white"; };
     };
 
-    function transitionBorderWidth(element) {
-        element
-            .transition().duration(400).style("border-width", "6px")
-            .transition().style("border-width", "2px");
+    var gare1 = null;
+    var gare2 = null;
+
+    function colorInteraction() {
+        if (gare1) {return couleur2; }
+        else {return couleur1; };
+    }
+
+    function getCode(list, name) {
+        return list.find(function(d) {if (d.name == name) {return d; }}).code;
     };
 
-    function showStats() {
-        d3.select("#start").attr("style","display: none;");
-        d3.select("#stat").attr("style","display: block; height: 318px; width: 100%;");
-        d3.select("#barChart").attr("style","display: inline-block; height: 318px; width: 49%;")
-        d3.select("#radarChart").attr("style","display: inline-block; height: 318px; width: 49%;");
+    function getName(list, code) {
+        return list.find(function(d) {if (d.code == code) {return d; }}).name;
     };
 
     function firstStationChange(data, gare1, gare2) {
