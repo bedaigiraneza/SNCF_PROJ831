@@ -398,42 +398,36 @@
                     secondStationChange(data, gare1, gare2);
                 });
 
-            gare.enter()
-                .append("circle")
-                .attr("r", function(d) {return d.radius; })
-                .style("stroke","black")
-                .attr("fill", function(d) {return colorQuantile(d.variation); })
-                .on("mousemove", function(d) {
-                    var mouse = d3.mouse(svg.node()).map(function(d) {return parseInt(d); });
-                    tooltip.classed("hidden", false)
-                        .attr("style", "left:" + (mouse[0] + 30) + "px; top:" + (mouse[1] - 35) + "px; border: 2px solid "+colorInteraction())
-                        .html("<p><strong>"+d.name+"</strong></p><p>Department: "+d.county+"</p><p>Region: "+d.region+"</p>");
-                })
-                .on("mouseenter", function(){
-                    d3.select(this).transition().attr("fill", colorInteraction());
-                })
-                .on("mouseleave", function(){
-                    d3.select(this).transition().attr("fill", function(d){return colorQuantile(d.variation); }).style("stroke-width", 1);
-                    tooltip.classed("hidden", true);
-                })
-                .on("click", function(d){
-                    showStats();
-                    if (gare1) {
-                        gare2 = d.code;
-                        var secondStationName = getName(nodes, gare2);
-                        secondDropdown.property("value", secondStationName);
-                        secondStationChange(data, gare1, gare2);
-                    }
-                    else {
-                        gare1 = d.code;
-                        var firstStationName = getName(nodes, gare1);
-                        firstDropdown.property("value", firstStationName);
-                        firstStationChange(data, gare1, gare2);
-                    }
-                })
-                .merge(gare)
-                .attr("cx", function(d) {return d.x; })
-                .attr("cy", function(d) {return d.y; });
+            secondChoiceZone.append("button")
+                .attr("id","secondCross")
+                .attr("type","button")
+                .attr("style","display: none;")
+                .html("&#10060;")
+                .on("click", function(){
+                    gare2=null;
+                    var secondStationName = getName(nodes, gare2);
+                    secondDropdown.property("value", secondStationName);
+                    transitionBorderWidth(d3.select("#secondChoiceZone"));
+                    d3.select(this).attr("style", "display: none;");
+                    CreateStat(data, gare1, gare2);
+                    CreateGlyph(data, gare1, gare2);
+                });
+
+            var secondOptions = secondDropdown
+                .selectAll("option")
+                .data(nodes).enter()
+                .append("option")
+                .text(function(d) {return d.name; });
+
+            var simulation = d3.forceSimulation(nodes)
+                .force("x", d3.forceX(function(d) {return d.x; }).strength(0.55))
+                .force("y", d3.forceY(function(d) {return d.y; }).strength(0.55))
+                .force("collide", d3.forceCollide().radius(function(d) { return d.radius + 0.3; }))
+                .stop();
+
+            for (i=0; i<100; i++) {simulation.tick(); }
+
+            var gare = gares.selectAll("circle").data(nodes);
 
             var legend = svg.append("g")
                 .attr("class","legend")
