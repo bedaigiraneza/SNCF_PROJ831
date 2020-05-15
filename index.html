@@ -542,7 +542,7 @@
             eachPosColor.append("text")
                 .attr("transform", function(d,i) {return "translate(" + 25 + ",3)"; })
                 .attr("style","font-size: 0.7em;")
-                .text(function(d,i) {return "From +"+d3.format(".0%")(quantilesPosColor[i+1])+" to +"+d3.format(".0%")(quantilesPosColor[i]); } );
+                .text(function(d,i) {return "De +"+d3.format(".0%")(quantilesPosColor[i+1])+" à +"+d3.format(".0%")(quantilesPosColor[i]); } );
 
             eachPosColor
                 .on("mouseenter", function(d){
