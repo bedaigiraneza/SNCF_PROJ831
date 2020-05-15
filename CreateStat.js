@@ -562,3 +562,96 @@ function refreshMotif(mot1,mot2,gare1,gare2){
             .style("font-style","italic")
             .style("text-anchor","start")
     };
+
+
+    var max_y = +d3.select("#motifSvg").attr("height")/1.5
+
+    var y_motif = d3.scaleLinear()
+        .range([max_y,0])
+
+    var x_motif = d3.scaleBand()
+        .domain(['Commuters','Studies','Business','Leisure'])
+        .range([0, +d3.select("#motifSvg").attr("width")/1.3])
+
+    var x_motif1 = d3.scaleBand()
+        .padding(0.1)
+        .domain([0,1])
+        .range([0,x_motif.bandwidth()])
+
+    var xAxis_motif = d3.axisBottom(x_motif)
+
+    var axe_histo_motif = motifG.append("g")
+        .attr("transform","translate("+0+","+(max_y+0)+")")
+        .attr('class','x axis')
+        .call(xAxis_motif)
+
+    var max_motif = d3.max([mot1[1].divers,mot1[1].commute,mot1[1].etudes,mot1[1].loisirs,mot1[1].occasionnel,mot2[1].divers,mot2[1].commute,mot2[1].etudes,mot2[1].loisirs,mot2[1].occasionnel])
+    y_motif.domain([0,max_motif])
+
+    var yAxis_motif = d3.axisLeft()
+        .scale(y_motif);
+
+    var axey_histo_motif = motifG.append("g")
+        .attr("transform","translate("+0+","+0+")")
+        .attr('class','y axis')
+        .call(yAxis_motif.tickFormat(d=> d+"%"))
+
+
+    motifG.append("rect")
+        .attr("x", x_motif('Commuters')+x_motif1(1)-20)
+        .attr("y", y_motif(mot1[1].commute))
+        .attr("height", max_y-y_motif(mot1[1].commute))
+        .attr("width",20)
+        .style("fill",couleur1)
+
+    motifG.append("rect")
+        .attr("x",x_motif('Studies')+x_motif1(1)-20)
+        .attr("y",y_motif(mot1[1].etudes))
+        .attr("height", max_y-y_motif(mot1[1].etudes))
+        .attr("width",20)
+        .style("fill",couleur1)
+
+    motifG.append("rect")
+        .attr("x", x_motif('Business')+x_motif1(1)-20)
+        .attr("y", y_motif(mot1[1].occasionnel))
+        .attr("height", max_y-y_motif(mot1[1].occasionnel))
+        .attr("width",20)
+        .style("fill",couleur1)
+
+    motifG.append("rect")
+        .attr("x", x_motif('Leisure')+x_motif1(1)-20)
+        .attr("y", y_motif(mot1[1].loisirs))
+        .attr("height", max_y-y_motif(mot1[1].loisirs))
+        .attr("width",20)
+        .style("fill",couleur1)
+
+
+    motifG.append("rect")
+        .attr("x", x_motif('Commuters')+x_motif1(1))
+        .attr("y", y_motif(mot2[1].commute))
+        .attr("height", max_y-y_motif(mot2[1].commute))
+        .attr("width",20)
+        .style("fill",couleur2)
+
+    motifG.append("rect")
+        .attr("x", x_motif('Studies')+x_motif1(1))
+        .attr("y", y_motif(mot2[1].etudes))
+        .attr("height", max_y-y_motif(mot2[1].etudes))
+        .attr("width",20)
+        .style("fill",couleur2)
+
+    motifG.append("rect")
+        .attr("x", x_motif('Business')+x_motif1(1))
+        .attr("y", y_motif(mot2[1].occasionnel))
+        .attr("height", max_y-y_motif(mot2[1].occasionnel))
+        .attr("width",20)
+        .style("fill",couleur2)
+
+    motifG.append("rect")
+        .attr("x", x_motif('Leisure')+x_motif1(1))
+        .attr("y", y_motif(mot2[1].loisirs))
+        .attr("height", max_y-y_motif(mot2[1].loisirs))
+        .attr("width",20)
+        .style("fill",couleur2)
+}
+
