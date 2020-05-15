@@ -577,23 +577,23 @@
             };
             quantilesNegColor.reverse();
 
-eachNegColor.append("text")
-.attr("transform", function(d,i) {return "translate(" + 25 + ",3)"; })
-.attr("style","font-size: 0.7em;")
-.text(function(d,i) {return "From "+d3.format(".0%")(quantilesNegColor[i+1])+" to "+d3.format(".0%")(quantilesNegColor[i]); } );
+            eachNegColor.append("text")
+                .attr("transform", function(d,i) {return "translate(" + 25 + ",3)"; })
+                .attr("style","font-size: 0.7em;")
+                .text(function(d,i) {return "From "+d3.format(".0%")(quantilesNegColor[i+1])+" to "+d3.format(".0%")(quantilesNegColor[i]); } );
 
-eachNegColor
-.on("mouseenter", function(d){
-legendColor.selectAll("g").filter(function(e){return (e !== d); }).transition().style("opacity", 0.08);
-gares.selectAll("circle").filter(function(e){return (colorQuantile(e.variation) !== d); })
-.transition().style("opacity", 0.08);
-})
-.on("mouseleave", function(d){
-legendColor.selectAll("g").transition().style("opacity", 1);
-var selection = gares.selectAll("circle").filter(function(e){return (colorQuantile(e.variation) !== d); })
-showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox);
-});
-});
-});
+            eachNegColor
+                .on("mouseenter", function(d){
+                    legendColor.selectAll("g").filter(function(e){return (e !== d); }).transition().style("opacity", 0.08);
+                    gares.selectAll("circle").filter(function(e){return (colorQuantile(e.variation) !== d); })
+                        .transition().style("opacity", 0.08);
+                })
+                .on("mouseleave", function(d){
+                    legendColor.selectAll("g").transition().style("opacity", 1);
+                    var selection = gares.selectAll("circle").filter(function(e){return (colorQuantile(e.variation) !== d); })
+                    showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox);
+                });
+        });
+    });
 </script>
 </body>
