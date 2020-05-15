@@ -511,29 +511,26 @@
                     showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox);
                 });
 
-            var quantilesPosColor = [];
-            var numberOfIntervalsPosColor = posColorScale.range().length;
-            for (i=0; i<numberOfIntervalsPosColor+1; i++){
-                quantilesPosColor.push(d3.quantile(posColorScale.domain(),i/numberOfIntervalsPosColor));
-            };
-            quantilesPosColor.reverse();
+            var legendColor = legend.append("g").attr("id","colorQuantile").attr("transform","translate(0,"+20*(numberOfIntervalsRadius+3)+")");
 
-            eachPosColor.append("text")
-                .attr("transform", function(d,i) {return "translate(" + 25 + ",3)"; })
-                .attr("style","font-size: 0.7em;")
-                .text(function(d,i) {return "From +"+d3.format(".0%")(quantilesPosColor[i+1])+" to +"+d3.format(".0%")(quantilesPosColor[i]); } );
+            var colorText = legendColor.append("text")
+                .attr("style","font-size: 0.8em; font-weight: bold;")
+                .attr("x",0)
+                .text("Fluctuation 2016 / 2015:");
 
-            eachPosColor
-                .on("mouseenter", function(d){
-                    legendColor.selectAll("g").filter(function(e){return (e !== d); }).transition().style("opacity", 0.08);
-                    gares.selectAll("circle").filter(function(e){return (colorQuantile(e.variation) !== d); })
-                        .transition().style("opacity", 0.08);
-                })
-                .on("mouseleave", function(d){
-                    legendColor.selectAll("g").transition().style("opacity", 1);
-                    var selection = gares.selectAll("circle").filter(function(e){return (colorQuantile(e.variation) !== d); })
-                    showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox);
-                });
+            var eachPosColor = legendColor.selectAll(".positive")
+                .data(posColorScale.range().reverse())
+                .enter()
+                .append("g")
+                .attr("class","positive")
+                .attr("transform", function(d,i) {return "translate(" + 15 + "," + (20+i*19) +")"; });
+
+            eachPosColor.append("circle")
+                .style("stroke", "black")
+                .attr("cx", 0)
+                .attr("cy", 0)
+                .attr("r",9)
+                .attr("fill", function(d) {return d});
 
             var eachNegColor = legendColor.selectAll(".negative")
                 .data(negColorScale.range().reverse())
