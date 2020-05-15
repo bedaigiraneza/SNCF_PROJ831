@@ -310,6 +310,90 @@ d3.csv("all-joined-datasets.csv",function(data){
               .attr("x", 150 )
               .attr("text-anchor","start")
 
+      //  emplacements des texts
+      svg.append("text")
+              .attr("id","valeur_rang")
+              .attr("y", 50 + margin.left)
+              .attr("x", function(){return d3.select("#valeur_voyageurs").attr("x")})
+              .style("text-anchor","start")
+
+      // emplacement du rang pour la gare 2
+      svg.append("text")
+              .attr("id","valeur_rang2")
+              .attr("y", 50 + margin.left)
+              .attr("x",function(){return +d3.select("#valeur_voyageurs2").attr("x")})
+              .style("text-anchor","end")
+
+      // emplacement du rang de variation pour la gare 1
+      svg.append("text")
+              .attr("id","valeur_rangvar")
+              .attr("y", 78 + margin.left)
+              .attr("x", function(){return d3.select("#valeur_variation").attr("x")})
+              .style("text-anchor","start")
+
+      // emplacement du rang de varaition pour la gare 2
+      svg.append("text")
+              .attr("id","valeur_rangvar2")
+              .attr("y", 78 + margin.left)
+              .attr("x",function(){return +d3.select("#valeur_variation2").attr("x")})
+              .style("text-anchor","end")
+
+      data.forEach(function(d){
+        if(d.Code_UIC == gare1){
+
+          d3.select("#valeur_rang")
+                  .text("(#"+(128-d.RangNbVoy)+")")
+                  .attr("fill",couleur1)
+
+          d3.select("#valeur_rangvar")
+                  .text("(#"+(128-d.RangVariations)+")")
+                  .attr("fill",couleur1)
+
+          d3.select("#valeur_voyageurs")
+                  .text(d3.format(".3s")(d.voyageurs_2016))
+                  .attr("fill",couleur1)
+          //.attr("class","text_colorie")
+
+          d3.select("#valeur_variation")
+                  .text(d3.format(".0%")(d.variation))
+                  .attr("fill",couleur1)
+          //.attr("class","text_colorie")
+
+          d3.select("#nom1")
+                  .text(d.Nom_de_la_gare)
+                  .attr("fill",couleur1)
+          //.attr("class","text_colorie")
+
+          ;}
+        else if(d.Code_UIC == gare2){
+
+          d3.select("#valeur_rang2")
+                  .text("(#"+(128-d.RangNbVoy)+")")
+                  .attr("fill",couleur2)
+
+          d3.select("#valeur_rangvar2")
+                  .text("(#"+(128-d.RangVariations)+")")
+                  .attr("fill",couleur2)
+
+          d3.select("#valeur_voyageurs2")
+                  .text(d3.format(".3s")(d.voyageurs_2016))
+                  .attr("fill",couleur2)
+
+
+          d3.select("#valeur_variation2")
+                  .text(d3.format(".0%")(d.variation))
+                  .attr("fill",couleur2)
+
+
+          d3.select("#nom2")
+                  .text(d.Nom_de_la_gare)
+                  .attr("fill",couleur2)
+
+
+          ;}
+        ;})
+      ;}
+
   </script>
 </div>
 </body>
