@@ -719,3 +719,37 @@ function refreshDiv(div1,div2,gare1,gare2){
             .style("text-anchor","start")
     };
 };
+
+function refreshAcces(acc1,acc2,gare1,gare2){
+
+    var new_acc = []
+    new_acc.push(["voiture",acc1[1].voiture,acc2[1].voiture])
+    new_acc.push(["taxis",acc1[1].taxis,acc2[1].taxis])
+    new_acc.push(["bus",acc1[1].bus,acc2[1].bus])
+    new_acc.push(["metro",acc1[1].metro,acc2[1].metro])
+    new_acc.push(["tram",acc1[1].tram,acc2[1].tram])
+    new_acc.push(["marche",acc1[1].marche,acc2[1].marche])
+    new_acc.push(["velo",acc1[1].velo,acc2[1].velo])
+
+    var new_acc1 = [],
+        new_acc2 = [];
+
+    for(var n=0;n<new_acc.length;n++){
+        if(new_acc[n][1]>0 || new_acc[n][2]>0){
+            new_acc1.push([new_acc[n][0],new_acc[n][1]])
+            new_acc2.push([new_acc[n][0],new_acc[n][2]])
+        }
+    };
+
+    var i = new_acc1.length;
+
+    for(var indice=0;indice<i;indice++){
+        if(new_acc1[indice][0]=='voiture'){refreshVoiture(new_acc1,new_acc2,indice)}
+        if(new_acc1[indice][0]=='taxis'){refreshTaxis(new_acc1,new_acc2,indice)}
+        if(new_acc1[indice][0]=='bus'){refreshBus(new_acc1,new_acc2,indice)}
+        if(new_acc1[indice][0]=='metro'){refreshMetro(new_acc1,new_acc2,indice)}
+        if(new_acc1[indice][0]=='tram'){refreshTram(new_acc1,new_acc2,indice)}
+        if(new_acc1[indice][0]=='marche'){refreshMarche(new_acc1,new_acc2,indice)}
+        if(new_acc1[indice][0]=='velo'){refreshVelo(new_acc1,new_acc2,indice)}
+
+    };
