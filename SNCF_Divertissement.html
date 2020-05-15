@@ -11,7 +11,6 @@
 <body>
 <div>
   <script>
-    // Feel free to change or delete any of the code you see in this editor!
     var margin = {top : 20,left: 0, right: 20, bottom: 20}
     
     var svg = d3.select("body").append("svg")
@@ -19,9 +18,9 @@
       .attr("height", 500);
 
     // gare 1 selectionnée virtuellement 
-    var gare1 = 713040; //384008 //713040//  
+    var gare1 = 713040;
     // gare 2 selectionnée virtuellement
-    var gare2 = 384008; //172007
+    var gare2 = 384008;
     
     var w_rect = 18;
     var h_rect = 36;
@@ -34,9 +33,10 @@
     var couleur2 =	'yellow';
     var couleur3 = 'lightgrey';
     
- 		// définition des dimensions globalisées des carrés
+
+    // définition des dimensions globalisées des carrés
     
-		var histo_acces = svg.append("g");
+    var histo_acces = svg.append("g");
     
     var div = d3.select("body").append("div")	
     .attr("class", "tooltip")
@@ -49,7 +49,7 @@
     .style("opacity", 0);
  	
 
-// début csv
+// importation de daatasets csv
 d3.csv("all-joined-datasets.csv",function(data){
 
   var divertissements1 = [{uic: gare1}] //json avec les divertissements en gare1
@@ -63,52 +63,51 @@ d3.csv("all-joined-datasets.csv",function(data){
   
   //parcour des données
   data.forEach(function(d){
-    // text
     d.variation = (+d.voyageurs_2016-+d.voyageurs_2015)/(d.voyageurs_2015)
 
 	if(d.Code_UIC == gare1){
 		divertissements1.push({wifi: d.Wifi,
-													 baby_foot: d.Baby_Foot,
-													 powerstation: d.Power_Station,
-													 piano: d.Piano,
-													 histoires: d.Distr_Histoires_Courtes})
-    
+        baby_foot: d.Baby_Foot,
+        powerstation: d.Power_Station,
+        piano: d.Piano,
+        histoires: d.Distr_Histoires_Courtes})
+
     acces1.push({voiture: +d.deux_roues_motorisees + +d.Autres_voitures_location_autopartage + +d.Voiture_Conducteur + +d.Voiture_passager,
-                 taxis: +d.Taxis,
-    						 bus: +d.Bus_Car_Navette,
-                 metro: +d.Metro_RER,
-                 tram: +d.Tramway,
-    						 marche: +d.Marche,
-    						 velo: +d.Velo})
+        taxis: +d.Taxis,
+        bus: +d.Bus_Car_Navette,
+        metro: +d.Metro_RER,
+        tram: +d.Tramway,
+        marche: +d.Marche,
+        velo: +d.Velo})
     
     motif1.push({divers: +d.Demarches_administratives_medicales_ou_achat,
-                 commute: +d.Deplacement_domicile_travail_habituel,
-                 etudes: +d.Deplacement_domicile_etude_y_compris_stage,
-    						 occasionnel: +d.Deplacement_professionnel_occasionnel,
-   							 loisirs: +d.Loisirs_vacances_visite_d_un_proche_ou_ami})
+       commute: +d.Deplacement_domicile_travail_habituel,
+       etudes: +d.Deplacement_domicile_etude_y_compris_stage,
+       occasionnel: +d.Deplacement_professionnel_occasionnel,
+       loisirs: +d.Loisirs_vacances_visite_d_un_proche_ou_ami})
   }  
 	if(d.Code_UIC == gare2){
-		divertissements2.push({wifi: d.Wifi,
-													 baby_foot: d.Baby_Foot,
-													 powerstation: d.Power_Station,
-													 piano: d.Piano,
-													 histoires: d.Distr_Histoires_Courtes})
+	  divertissements2.push({wifi: d.Wifi,
+       baby_foot: d.Baby_Foot,
+       powerstation: d.Power_Station,
+       piano: d.Piano,
+       histoires: d.Distr_Histoires_Courtes})
     
     acces2.push({voiture: +d.deux_roues_motorisees + +d.Autres_voitures_location_autopartage + +d.Voiture_Conducteur + +d.Voiture_passager,
                  taxis: +d.Taxis,
-    						 bus: +d.Bus_Car_Navette,
+    			 bus: +d.Bus_Car_Navette,
                  metro: +d.Metro_RER,
                  tram: +d.Tramway,
-    						 marche: +d.Marche,
-    						 velo: +d.Velo})
+    			 marche: +d.Marche,
+    			 velo: +d.Velo})
     
     motif2.push({divers: +d.Demarches_administratives_medicales_ou_achat,
                  commute: +d.Deplacement_domicile_travail_habituel,
                  etudes: +d.Deplacement_domicile_etude_y_compris_stage,
-    						 occasionnel: +d.Deplacement_professionnel_occasionnel,
-   							 loisirs: +d.Loisirs_vacances_visite_d_un_proche_ou_ami})
+                 occasionnel: +d.Deplacement_professionnel_occasionnel,
+                 loisirs: +d.Loisirs_vacances_visite_d_un_proche_ou_ami})
   }
-	})// fin forEach
+	})
 
   if (gare1 == null && gare2 != null){
     divertissements1 = divertissements2
@@ -121,178 +120,172 @@ d3.csv("all-joined-datasets.csv",function(data){
     motif2 = motif1;
   }
 	
-	refreshText(data,gare1,gare2)
+  refreshText(data,gare1,gare2)
   refreshDiv(divertissements1,divertissements2)
   refreshAcces(acces1,acces2)
   d3.selectAll("rect")
     	.attr("width",w_rect)
     	.attr("height",h_rect)
-  // utilisation des dimensions globalisées #modif		
-  		
-  
+
+  // utilisation des dimensions globalisées
   refreshMotif(motif1,motif2)
   if(gare1==null){d3.selectAll("rect").style("fill",couleur2);}
-  else if(gare2==null){d3.selectAll("rect").style("fill",couleur1);}                                           
-
-  
+  else if(gare2==null){d3.selectAll("rect").style("fill",couleur1);}
 ;
   
-})// fin csv
-
+})
 
 // Définition des fonctions
-
 function refreshText(data,gare1,gare2){
 		
     // emplacement du text 'nom des gares'
     svg.append("text")
-    	.attr("id","nom")
+      .attr("id","nom")
       .text("Nom des gares")
       .attr("y", 0 + margin.top)
       .attr("x", 0 + margin.left)
-    	.attr("text-anchor","start")
+      .attr("text-anchor","start")
     
     // emplacement du nom de la gare 1
     svg.append("text")
-    	.attr("id","nom1")
+      .attr("id","nom1")
       .text("")
       .attr("y", 0 + margin.top)
       .attr("x", function(){return d3.select("#nom").attr("x")+275})
-    	.attr("text-anchor","end")
+      .attr("text-anchor","end")
     
     // emplacement du nom de la gare 2
     svg.append("text")
-    	.attr("id","nom2")
-      .text("")
-      .attr("y", 0 + margin.top)
-      .attr("x", function(){return d3.select("#nom").attr("x")+350})
-    	.attr("text-anchor","start")
+        .attr("id","nom2")
+        .text("")
+        .attr("y", 0 + margin.top)
+        .attr("x", function(){return d3.select("#nom").attr("x")+350})
+        .attr("text-anchor","start")
     
 		// emplacement du text 'nombre de voyageurs'
     svg.append("text")
-    	.attr("id","Nombredevoyageurs")
-      .text("Nombre de voyageurs")
-      .attr("y", 30 + margin.top)
-      .attr("x", 0 + margin.left)
-    	.attr("text-anchor","start")
+        .attr("id","Nombredevoyageurs")
+        .text("Nombre de voyageurs")
+        .attr("y", 30 + margin.top)
+        .attr("x", 0 + margin.left)
+        .attr("text-anchor","start")
     
     // emplacement de la valeur correspondante pour la gare 1
     svg.append("text")
-    	.attr("id","valeur_voyageurs")
-    	.text("")
-      .attr("y", 30 + margin.top)
-      .attr("x",function(){return d3.select("#Nombredevoyageurs").attr("x")+275})
-    	.attr("text-anchor","end")
+        .attr("id","valeur_voyageurs")
+        .text("")
+        .attr("y", 30 + margin.top)
+        .attr("x",function(){return d3.select("#Nombredevoyageurs").attr("x")+275})
+        .attr("text-anchor","end")
     
     // emplacement de la valeur correspondante pour la gare 2
     svg.append("text")
-    	.attr("id","valeur_voyageurs2")
-    	.text("")
-      .attr("y", 30 + margin.top)
-      .attr("x", function(){return d3.select("#Nombredevoyageurs").attr("x")+350})
-    	.attr("text-anchor","start")
+        .attr("id","valeur_voyageurs2")
+        .text("")
+        .attr("y", 30 + margin.top)
+        .attr("x", function(){return d3.select("#Nombredevoyageurs").attr("x")+350})
+        .attr("text-anchor","start")
     
     // emplacement du text 'variation par rapport à 2015'
     svg.append("text")
-    	.attr("id","Variation")
-      .text("Variation par rapport à 2015")
-      .attr("y", 60 + margin.top)
-      .attr("x", 0 + margin.left)
-    	.attr("text-anchor","start")
+        .attr("id","Variation")
+        .text("Variation par rapport à 2015")
+        .attr("y", 60 + margin.top)
+        .attr("x", 0 + margin.left)
+        .attr("text-anchor","start")
     
     // emplacement de la valeur correspondante pour la gare 1
     svg.append("text")
-    	.attr("id","valeur_variation")
-    	.text("")
-      .attr("y", 78 + margin.left)
-      .attr("x", function(){return d3.select("#Variation").attr("x")+275})
-    	.style("text-anchor","end")
+        .attr("id","valeur_variation")
+        .text("")
+        .attr("y", 78 + margin.left)
+        .attr("x", function(){return d3.select("#Variation").attr("x")+275})
+        .style("text-anchor","end")
     
     // emplacement de la valeur correspondante pour la gare 2
     svg.append("text")
-    	.attr("id","valeur_variation2")
-    	.text("")
-      .attr("y", 78 + margin.left)
-      .attr("x", function(){return d3.select("#Variation").attr("x")+350})
-    	.style("text-anchor","start")
+        .attr("id","valeur_variation2")
+        .text("")
+        .attr("y", 78 + margin.left)
+        .attr("x", function(){return d3.select("#Variation").attr("x")+350})
+        .style("text-anchor","start")
     
     // emplacement du text 'Divertissement'
     svg.append("text")
-    	.attr("id","Wifi")
-      .text("Divertissements")
-      .attr("y", 100 + margin.top)
-      .attr("x", 0 + margin.left)
-    	.attr("text-anchor","start")
+        .attr("id","Wifi")
+        .text("Divertissements")
+        .attr("y", 100 + margin.top)
+        .attr("x", 0 + margin.left)
+        .attr("text-anchor","start")
     
     // emplacement du text "Moyens d'acces"
     svg.append("text")
-    	.attr("id","Moyenacces")
-      .text("Moyens d'accès")
-      .attr("y", 145 + margin.top)
-      .attr("x", 0 + margin.left)
-    	.attr("text-anchor","start")
+        .attr("id","Moyenacces")
+        .text("Moyens d'accès")
+        .attr("y", 145 + margin.top)
+        .attr("x", 0 + margin.left)
+        .attr("text-anchor","start")
     
     // emplacement du text "Motif du déplacement"
     svg.append("text")
-    	.attr("id","Motifsdeplacements")
-      .text("Motif du déplacement")
-      .attr("y", 190 + margin.top)
-      .attr("x", 150 )
-    	.attr("text-anchor","start")
+        .attr("id","Motifsdeplacements")
+        .text("Motif du déplacement")
+        .attr("y", 190 + margin.top)
+        .attr("x", 150 )
+        .attr("text-anchor","start")
    
     // #modif : emplacements des texts + espacement entre les texts (voir plus haut 300->350)
     // emplacement du rang pour la gare 1
     svg.append("text")
-    	.attr("id","valeur_rang")
-      .attr("y", 50 + margin.left)
-      .attr("x", function(){return d3.select("#valeur_voyageurs").attr("x")})
-    	.style("text-anchor","start")
+        .attr("id","valeur_rang")
+        .attr("y", 50 + margin.left)
+        .attr("x", function(){return d3.select("#valeur_voyageurs").attr("x")})
+        .style("text-anchor","start")
     
     // emplacement du rang pour la gare 2
     svg.append("text")
-    	.attr("id","valeur_rang2")
-      .attr("y", 50 + margin.left)
-      .attr("x",function(){return +d3.select("#valeur_voyageurs2").attr("x")})
-    	.style("text-anchor","end")
+        .attr("id","valeur_rang2")
+        .attr("y", 50 + margin.left)
+        .attr("x",function(){return +d3.select("#valeur_voyageurs2").attr("x")})
+        .style("text-anchor","end")
     
     // emplacement du rang de variation pour la gare 1
     svg.append("text")
-    	.attr("id","valeur_rangvar")
-      .attr("y", 78 + margin.left)
-      .attr("x", function(){return d3.select("#valeur_variation").attr("x")})
-    	.style("text-anchor","start")
+        .attr("id","valeur_rangvar")
+        .attr("y", 78 + margin.left)
+        .attr("x", function(){return d3.select("#valeur_variation").attr("x")})
+        .style("text-anchor","start")
     
     // emplacement du rang de varaition pour la gare 2
     svg.append("text")
-    	.attr("id","valeur_rangvar2")
-      .attr("y", 78 + margin.left)
-      .attr("x",function(){return +d3.select("#valeur_variation2").attr("x")})
-    	.style("text-anchor","end")
+        .attr("id","valeur_rangvar2")
+        .attr("y", 78 + margin.left)
+        .attr("x",function(){return +d3.select("#valeur_variation2").attr("x")})
+        .style("text-anchor","end")
     
   data.forEach(function(d){
     if(d.Code_UIC == gare1){
       
       d3.select("#valeur_rang")
   		.text("(#"+(128-d.RangNbVoy)+")")
-      .attr("fill",couleur1)
+        .attr("fill",couleur1)
       
       d3.select("#valeur_rangvar")
   		.text("(#"+(128-d.RangVariations)+")")
-      .attr("fill",couleur1)
+        .attr("fill",couleur1)
       
-			d3.select("#valeur_voyageurs")
+      d3.select("#valeur_voyageurs")
   		.text(d3.format(".3s")(d.voyageurs_2016))
-      .attr("fill",couleur1)
-      //.attr("class","text_colorie")
-  
-  		d3.select("#valeur_variation")
+        .attr("fill",couleur1)
+
+      d3.select("#valeur_variation")
   		.text(d3.format(".0%")(d.variation))
-      .attr("fill",couleur1)
+        .attr("fill",couleur1)
       //.attr("class","text_colorie")
       
       d3.select("#nom1")
   		.text(d.Nom_de_la_gare)
-      .attr("fill",couleur1)
+        .attr("fill",couleur1)
       //.attr("class","text_colorie")
 
       ;} // fin if
@@ -301,44 +294,39 @@ function refreshText(data,gare1,gare2){
       
       d3.select("#valeur_rang2")
   		.text("(#"+(128-d.RangNbVoy)+")")
-      .attr("fill",couleur2)
+        .attr("fill",couleur2)
       
       d3.select("#valeur_rangvar2")
   		.text("(#"+(128-d.RangVariations)+")")
-      .attr("fill",couleur2)
+        .attr("fill",couleur2)
       
       d3.select("#valeur_voyageurs2")
   		.text(d3.format(".3s")(d.voyageurs_2016))
-      .attr("fill",couleur2)
+        .attr("fill",couleur2)
       
   
   		d3.select("#valeur_variation2")
   		.text(d3.format(".0%")(d.variation))
-      .attr("fill",couleur2)
+        .attr("fill",couleur2)
       
       
       d3.select("#nom2")
   		.text(d.Nom_de_la_gare)
-      .attr("fill",couleur2)
-      
-  
-      ;}// fin if
-    //d3.selectAll(".text_colorie")
-    	//.style("fill",function(){if})
-  ;}) // fin forEach
-;} // fin refresh
+        .attr("fill",couleur2)
+      ;}
+  ;})
+;}
 
 function refreshWifi(div1,div2,i){ 
   
   creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_wifi",function(){if(div1[i][1]=='true'){return couleur1}else{return couleur3}})
-    
-    creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_wifi2",function(){if(div2[i][1]=='true'){return couleur2}else{return couleur3}})
+  creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_wifi2",function(){if(div2[i][1]=='true'){return couleur2}else{return couleur3}})
   
     var svg_wifi = svg.append("svg")
-    		svg_wifi.attr("preserveAspectRatio","xMidYMid meet") 
-        				 .attr("viewBox","0 0 550 550")
-             		 .attr("width",h_rect)
-        				 .attr("height",h_rect)
+    svg_wifi.attr("preserveAspectRatio","xMidYMid meet")
+            .attr("viewBox","0 0 550 550")
+            .attr("width",h_rect)
+            .attr("height",h_rect)
 svg_wifi.append("path")
 		.attr("id","path_wifi")
 		.attr("d","M0,146.93c2.44-6.87,7.4-11.36,13.32-15.39C68,94.27,127.92,70,193.55,60.83c112-15.68,214.64,8.85,308,72.69A29,29,0,0,1,512,146.93v9c-3.81,9-9.67,15.3-20.35,15.28-4.91,0-9-2-12.87-4.72-41-28.73-85.82-49.46-134.72-60.22Q177,69.54,34.84,165.37c-4.16,2.81-8.22,5.57-13.52,5.8C10.17,171.67,4,165.34,0,155.93v-9Z")
@@ -353,47 +341,47 @@ svg_wifi.append("path")
 		.attr("d","M256.44,355.87A49.92,49.92,0,0,1,306,406.06c-0.08,27.33-22.74,49.8-50.13,49.7a50.15,50.15,0,0,1-49.77-50.55C206.23,377.84,228.79,355.75,256.44,355.87Z")
   
   svg_wifi.attr("transform","translate("+ d3.select("#valeur_wifi").attr("x") +","+d3.select("#valeur_wifi").attr("y")+")")
-	
- 
+
 }    
 function refreshBaby(div1,div2,i){ 
   
   	creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_babyfoot",function(){if(div1[i][1]>0){return couleur1}else{return couleur3}})
-    
     creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_babyfoot2",function(){if(div2[i][1]>0){return couleur2}else{return couleur3}})
     
     var svg_babyfoot = svg.append("svg")
-    		svg_babyfoot.attr("preserveAspectRatio","xMidYMid meet") 
-        				 .attr("viewBox","0 0 100 100")
-             		 .attr("width",h_rect)
-        				 .attr("height",h_rect)
+    svg_babyfoot.attr("preserveAspectRatio","xMidYMid meet")
+                .attr("viewBox","0 0 100 100")
+                .attr("width",h_rect)
+                .attr("height",h_rect)
     svg_babyfoot.append("path")
-    .attr("id","path_babyfoot") 		    .attr("d","M32,31a8.5,8.5,0,1,0-8.5-8.5A8.50951,8.50951,0,0,0,32,31Zm0-15a6.5,6.5,0,1,1-6.5,6.5A6.50753,6.50753,0,0,1,32,16Z")
+    .attr("id","path_babyfoot")
+    .attr("d","M32,31a8.5,8.5,0,1,0-8.5-8.5A8.50951,8.50951,0,0,0,32,31Zm0-15a6.5,6.5,0,1,1-6.5,6.5A6.50753,6.50753,0,0,1,32,16Z")
     
     svg_babyfoot.append("path")
-    .attr("id","path_babyfoot") 		    .attr("d","M68,31a8.5,8.5,0,1,0-8.5-8.5A8.50951,8.50951,0,0,0,68,31Zm0-15a6.5,6.5,0,1,1-6.5,6.5A6.50753,6.50753,0,0,1,68,16Z")
+    .attr("id","path_babyfoot")
+     .attr("d","M68,31a8.5,8.5,0,1,0-8.5-8.5A8.50951,8.50951,0,0,0,68,31Zm0-15a6.5,6.5,0,1,1-6.5,6.5A6.50753,6.50753,0,0,1,68,16Z")
     
     svg_babyfoot.append("path")
     .attr("id","path_babyfoot")
     .attr("d","M95,43H79.65576l.34033-3.91357a.99935.99935,0,0,0-.25293-.75538l-4.5-5a1.00175,1.00175,0,0,0-.96826-.30566L68,34.47363l-6.2749-1.44824a1.0014,1.0014,0,0,0-.96826.30566l-4.5,5a.99935.99935,0,0,0-.25293.75538L56.34424,43H43.65576l.34033-3.91357a.99935.99935,0,0,0-.25293-.75538l-4.5-5a1.00244,1.00244,0,0,0-.96826-.30566L32,34.47363l-6.2749-1.44824a1.00072,1.00072,0,0,0-.96826.30566l-4.5,5a.99935.99935,0,0,0-.25293.75538L20.34424,43H5a1,1,0,0,0-1,1v6.5a1,1,0,0,0,1,1H21.65265l1.95282,1.541,1.644,21.13671-2.71728,2.74366a.99882.99882,0,0,0-.28955.70361V85a1,1,0,0,0,1,1H40.75732a1,1,0,0,0,1-1V77.625a.99882.99882,0,0,0-.28955-.70361l-2.71728-2.74366,1.644-21.13671L42.34735,51.5h15.3053l1.95282,1.541,1.644,21.13671-2.71728,2.74366a.99882.99882,0,0,0-.28955.70361V85a1,1,0,0,0,1,1H76.75732l.00428-.00085a8.49959,8.49959,0,1,0-1.62085-16.84253L76.39453,53.041,78.34735,51.5H95a1,1,0,0,0,1-1V44A1,1,0,0,0,95,43ZM6,49.5V45H20.51813l.39129,4.5Zm35.041.48291-2.229,1.75928a1.00111,1.00111,0,0,0-.37744.70752L36.7207,74.479a.99955.99955,0,0,0,.28662.78125l2.75,2.77637V84H24.24268V78.03662l2.75-2.77637a.99955.99955,0,0,0,.28662-.78125L25.56543,52.44971a1.00111,1.00111,0,0,0-.37744-.70752l-2.229-1.75928-.00836-.09613-.51507-5.97272c-.00074-.0083-.00562-.01495-.00653-.02319l-.39533-4.54468,3.81543-4.23926,5.92578,1.36768a1.00111,1.00111,0,0,0,.4502,0l5.92578-1.36768,3.81543,4.23926ZM43.09082,49.5l.3916-4.5H56.51813l.39129,4.5ZM76.74463,71a6.5,6.5,0,1,1-6.5,6.5A6.50753,6.50753,0,0,1,76.74463,71ZM77.041,49.98291l-2.229,1.75928a1.00111,1.00111,0,0,0-.37744.70752l-1.35333,17.392A8.48072,8.48072,0,0,0,71.27863,84h-11.036V78.03662l2.75-2.77637a.99955.99955,0,0,0,.28662-.78125L61.56543,52.44971a1.00111,1.00111,0,0,0-.37744-.70752l-2.229-1.75928-.00836-.09613-.51507-5.97272c-.00074-.0083-.00562-.01495-.00653-.02319l-.39533-4.54468,3.81543-4.23926,5.92578,1.36768a1.00111,1.00111,0,0,0,.4502,0l5.92578-1.36768,3.81543,4.23926ZM94,49.5H79.09131l.39453-4.5H94Z")
     
-    svg_babyfoot.attr("transform","translate("+ d3.select("#valeur_babyfoot").attr("x") +","+d3.select("#valeur_babyfoot").attr("y")+")")
-    d3.selectAll("#path_babyfoot").attr("stroke","black")
-    															.attr("stroke-width","2")
+    svg_babyfoot.attr("transform","translate("+
+            d3.select("#valeur_babyfoot").attr("x") +","+
+            d3.select("#valeur_babyfoot").attr("y")+")")
+            d3.selectAll("#path_babyfoot").attr("stroke","black")
+                                          .attr("stroke-width","2")
   
 } 
 function refreshPower(div1,div2,i){
   
   	creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_powerstation",function(){if(div1[i][1]>0){return couleur1}else{return couleur3}})
-    
     creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_powerstation2",function(){if(div2[i][1]>0){return couleur2}else{return couleur3}})
-    
     
     var svg_power = svg.append("svg")
     		svg_power.attr("preserveAspectRatio","xMidYMid meet") 
-        				 .attr("viewBox","-6 10 80 80")
+                    .attr("viewBox","-6 10 80 80")
              		 .attr("width",h_rect)
-        				 .attr("height",h_rect)
+                    .attr("height",h_rect)
         
     svg_power.append("path")
     .attr("id","path_power")    
@@ -779,10 +767,10 @@ function refreshAcces(acc1,acc2){
     
 function creationRects(x,y,id,couleur){
   svg.append("rect")
-  				 .attr("x",x)
-  				 .attr("y",y)
-  				 .attr("id",id)
-  				 .style("fill",couleur)
+     .attr("x",x)
+     .attr("y",y)
+     .attr("id",id)
+     .style("fill",couleur)
   ;}                     
   </script>
 </div>

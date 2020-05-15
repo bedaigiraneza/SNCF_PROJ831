@@ -80,7 +80,7 @@ function refreshText(data,gare1,gare2){
 		.attr("id","caracteristiques")
 		.attr("y", 0)
 		.attr("x", 0)
-		.text("Comparaison :");
+		.text("Comparaison de gares :");
 	
 	// emplacement du texte 'nom des gares'
 	statG.append("text")
@@ -98,7 +98,7 @@ function refreshText(data,gare1,gare2){
 		.attr("x", 0)
 		.attr("text-anchor","start")
 
-	// emplacement du text 'variation par rapport à 2015'
+	// emplacement du text 'variation par rapport à 2018'
 	statG.append("text")
 		.attr("id","Variation")
 		.text("Fluctuation 2019/2018:")
@@ -220,7 +220,7 @@ function refreshText(data,gare1,gare2){
 			.text(d.Nom_de_la_gare)
 			.attr("fill",couleur1);
 
-	}; // fin if
+	};
 
 	if(d.Code_UIC == gare2){
 		var mon_text2 = ""
@@ -246,18 +246,16 @@ function refreshText(data,gare1,gare2){
 		d3.select("#nom2")
 			.text(d.Nom_de_la_gare)
 			.attr("fill",couleur2)
-  
-	  ;}// fin else if
-  ;}) // fin forEach
-;} // fin refresh
+	  ;}
+  ;})
+;}
 
 
 function refreshWifi(div1,div2,i){
 	creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_wifi",function(){if(div1[i][1]=='true'){return couleur1}else{return couleur3}})
-    
     creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_wifi2",function(){if(div2[i][1]=='true'){return couleur2}else{return couleur3}})
-  
-    var svg_wifi = statG.append("svg")
+
+	var svg_wifi = statG.append("svg")
     
 	svg_wifi
 		.attr("preserveAspectRatio","xMidYMid meet") 
@@ -288,7 +286,6 @@ function refreshWifi(div1,div2,i){
 function refreshBaby(div1,div2,i){ 
   
   	creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_babyfoot",function(){if(div1[i][1]>0){return couleur1}else{return couleur3}})
-    
     creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_babyfoot2",function(){if(div2[i][1]>0){return couleur2}else{return couleur3}})
     
     var svg_babyfoot = statG.append("svg")
@@ -321,7 +318,6 @@ function refreshBaby(div1,div2,i){
 function refreshPower(div1,div2,i){
  
   	creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_powerstation",function(){if(div1[i][1]>0){return couleur1}else{return couleur3}})
-    
     creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_powerstation2",function(){if(div2[i][1]>0){return couleur2}else{return couleur3}})
     
     var svg_power = statG.append("svg")
@@ -342,7 +338,6 @@ function refreshPower(div1,div2,i){
 function refreshPiano(div1,div2,i){
   
   	creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_piano",function(){if(div1[i][1]>0){return couleur1}else{return couleur3}})
-    
     creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_piano2",function(){if(div2[i][1]>0){return couleur2}else{return couleur3}})
     
     var svg_piano = statG.append("svg")
@@ -363,7 +358,6 @@ function refreshPiano(div1,div2,i){
 function refreshBook(div1,div2,i){
 	
 	creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_histoire",function(){if(div1[i][1]>0){return couleur1}else{return couleur3}})
-    
     creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_divertissements,"valeur_histoire",function(){if(div2[i][1]>0){return couleur2}else{return couleur3}})
     
     var svg_book = statG.append("svg")
@@ -384,7 +378,6 @@ function refreshBook(div1,div2,i){
     
 function refreshVoiture(acc1,acc2,i){
 	creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_acces,"valeur_voiture",function(){if(acc1[i][1]>0){return couleur1}else{return couleur3}})
-    
     creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_acces,"valeur_voiture2",function(){if(acc2[i][1]>0){return couleur2}else{return couleur3}})    
     
 	var svg_voiture = statG.append("svg")
@@ -406,7 +399,6 @@ function refreshVoiture(acc1,acc2,i){
 
 function refreshTaxis(acc1,acc2,i){
 	creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_acces,"valeur_taxis",function(){if(acc1[i][1]>0){return couleur1}else{return couleur3}})
-    
     creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_acces,"valeur_taxis2",function(){if(acc2[i][1]>0){return couleur2}else{return couleur3}})
     
     var svg_taxis = statG.append("svg")
@@ -427,8 +419,8 @@ function refreshTaxis(acc1,acc2,i){
 }
 
 function refreshBus(acc1,acc2,i){
+
 	creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_acces,"valeur_bus",function(){if(acc1[i][1]>0){return couleur1}else{return couleur3}})
-    
     creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_acces,"valeur_bus2",function(){if(acc2[i][1]>0){return couleur2}else{return couleur3}})
 		
     var svg_bus = statG.append("svg")
@@ -448,7 +440,6 @@ function refreshBus(acc1,acc2,i){
 
 function refreshMetro(acc1,acc2,i){
 	creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_acces,"valeur_metro",function(){if(acc1[i][1]>0){return couleur1}else{return couleur3}})
-    
     creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_acces,"valeur_metro2",function(){if(acc2[i][1]>0){return couleur2}else{return couleur3}})
           
     var svg_metro = statG.append("svg")
@@ -469,8 +460,8 @@ function refreshMetro(acc1,acc2,i){
 }
      
 function refreshTram(acc1,acc2,i){
+
 	creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_acces,"valeur_tram",function(){if(acc1[i][1]>0){return couleur1}else{return couleur3}})
-    
     creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_acces,"valeur_tram2",function(){if(acc2[i][1]>0){return couleur2}else{return couleur3}})
           
     var svg_tram = statG.append("svg")
@@ -490,8 +481,8 @@ function refreshTram(acc1,acc2,i){
 }
     
 function refreshMarche(acc1,acc2,i){
+
 	creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_acces,"valeur_marche",function(){if(acc1[i][1]>0){return couleur1}else{return couleur3}})
-    
     creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_acces,"valeur_marche2",function(){if(acc2[i][1]>0){return couleur2}else{return couleur3}})
           
     var svg_marche = statG.append("svg")
@@ -511,8 +502,8 @@ function refreshMarche(acc1,acc2,i){
 }
 
 function refreshVelo(acc1,acc2,i){
+
 	creationRects(x_divertissements1+(i*h_rect)+(i*w_rect),y_acces,"valeur_velo",function(){if(acc1[i][1]>0){return couleur1}else{return couleur3}})
-    
     creationRects(x_divertissements2+(i*h_rect)+(i*w_rect),y_acces,"valeur_velo2",function(){if(acc2[i][1]>0){return couleur2}else{return couleur3}})
           
     var svg_velo = statG.append("svg")
@@ -740,8 +731,7 @@ function refreshAcces(acc1,acc2,gare1,gare2){
   
 	var i = new_acc1.length;
   
-	for(var indice=0;indice<i;indice++){ // debut for
-		//console.log(new_acc1)
+	for(var indice=0;indice<i;indice++){
 		if(new_acc1[indice][0]=='voiture'){refreshVoiture(new_acc1,new_acc2,indice)}
 		if(new_acc1[indice][0]=='taxis'){refreshTaxis(new_acc1,new_acc2,indice)}
 		if(new_acc1[indice][0]=='bus'){refreshBus(new_acc1,new_acc2,indice)}
@@ -750,11 +740,9 @@ function refreshAcces(acc1,acc2,gare1,gare2){
 		if(new_acc1[indice][0]=='marche'){refreshMarche(new_acc1,new_acc2,indice)}
 		if(new_acc1[indice][0]=='velo'){refreshVelo(new_acc1,new_acc2,indice)}
  
-	};// fin for
+	};
 	
-	//---------------------------------------------------------
-	// TRAITEMENT INFOS MANQUANTES #modif
-	//---------------------------------------------------------
+	// Traitement de données manquantees
 	var sum1 = 0,
 		sum2 = 0;
 	
@@ -779,7 +767,6 @@ function refreshAcces(acc1,acc2,gare1,gare2){
 			.style("font-style","italic")
 			.style("text-anchor","start")
     };
-   
 ;}
     
 function creationRects(x,y,id,couleur){

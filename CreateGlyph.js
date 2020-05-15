@@ -1,5 +1,4 @@
 function CreateGlyph(data, gare1 ,gare2) {
-
 	if (gare1 || gare2) {
 		function dataPoint(d,stationSelected){
 			return [{
