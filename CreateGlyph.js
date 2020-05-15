@@ -52,5 +52,31 @@ function CreateGlyph(data, gare1 ,gare2) {
 		        .style("text-anchor","center")
 		        .text("Performance:") 
 		};
+
+		//Première station est sélectionnée
+		if (gare2 == null && gare1 !== null) {
+			data.forEach(function(d){
+				if (d.Code_UIC == gare1){dataset=dataPoint(d,gare1); };
+			});
+			let svg_radar1 = RadarChart("#radarChart", dataset, radarChartOptions([couleur1]));
+			svg_radar1.append("text")
+				.attr("x",+d3.select("#radarChart").attr("x")/2)
+				.attr("y",15)
+				.style("text-anchor","center")
+				.text("Performance:")
+		};
+
+		//Deuxième station est sélectionnée
+		if (gare1 == null && gare2 !== null) {
+			data.forEach(function(d){
+				if (d.Code_UIC == gare2){dataset = dataPoint(d,gare2); };
+			});
+			let svg_radar1 = RadarChart("#radarChart", dataset, radarChartOptions([couleur2]));
+			svg_radar1.append("text")
+				.attr("x",+d3.select("#radarChart").attr("x")/2)
+				.attr("y",15)
+				.style("text-anchor","center")
+				.text("Performance:")
+		};
 	}
 };
