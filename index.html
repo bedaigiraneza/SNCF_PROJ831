@@ -123,33 +123,25 @@
         return list.find(function(d) {if (d.code == code) {return d; }}).name;
     };
 
-    function firstStationChange(data, gare1, gare2) {
-        transitionStrokeWidth(d3.select("#gares").selectAll("circle").filter(function(d){return (d.code == gare1); }));
-        transitionBorderWidth(d3.select("#firstChoiceZone"));
-        showStats();
-        CreateStat(data, gare1, gare2);
-        CreateGlyph(data, gare1, gare2);
-        if (gare1){
-            d3.select("#firstCross").attr("style","display: inline-block");
-        }
-        else {
-            d3.select("#firstCross").attr("style","display: none");
-        }
+    function transitionStrokeWidth(element) {
+        element
+            .transition().duration(400).style("stroke-width", 10)
+            .transition().style("stroke-width", 1);
     };
 
-    function secondStationChange(data, gare1, gare2) {
-        transitionStrokeWidth(d3.select("#gares").selectAll("circle").filter(function(d){return (d.code == gare2); }));
-        transitionBorderWidth(d3.select("#secondChoiceZone"));
-        showStats();
-        CreateStat(data, gare1, gare2);
-        CreateGlyph(data, gare1, gare2);
-        if (gare2){
-            d3.select("#secondCross").attr("style","display: inline-block");
-        }
-        else {
-            d3.select("#secondCross").attr("style","display: none");
-        }
+    function transitionBorderWidth(element) {
+        element
+            .transition().duration(400).style("border-width", "6px")
+            .transition().style("border-width", "2px");
     };
+
+    function showStats() {
+        d3.select("#start").attr("style","display: none;");
+        d3.select("#stat").attr("style","display: block; height: 318px; width: 100%;");
+        d3.select("#barChart").attr("style","display: inline-block; height: 318px; width: 49%;")
+        d3.select("#radarChart").attr("style","display: inline-block; height: 318px; width: 49%;");
+    };
+
 
     function hasOneOrMore(d){
         if(d>0){
