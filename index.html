@@ -556,23 +556,23 @@
                     showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox);
                 });
 
-            eachNegColor.append("text")
-                .attr("transform", function(d,i) {return "translate(" + 25 + ",3)"; })
-                .attr("style","font-size: 0.7em;")
-                .text(function(d,i) {return "From "+d3.format(".0%")(quantilesNegColor[i+1])+" to "+d3.format(".0%")(quantilesNegColor[i]); } );
+            var eachNegColor = legendColor.selectAll(".negative")
+                .data(negColorScale.range().reverse())
+                .enter()
+                .append("g")
+                .attr("class","negative")
+                .attr("transform", function(d,i) {return "translate(" + 15 + "," + (20+19*numberOfIntervalsPosColor+i*19) +")"; });
 
-            eachNegColor
-                .on("mouseenter", function(d){
-                    legendColor.selectAll("g").filter(function(e){return (e !== d); }).transition().style("opacity", 0.08);
-                    gares.selectAll("circle").filter(function(e){return (colorQuantile(e.variation) !== d); })
-                        .transition().style("opacity", 0.08);
-                })
-                .on("mouseleave", function(d){
-                    legendColor.selectAll("g").transition().style("opacity", 1);
-                    var selection = gares.selectAll("circle").filter(function(e){return (colorQuantile(e.variation) !== d); })
-                    showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox);
-                });
-        });
-    });
-</script>
-</body>
+            eachNegColor.append("circle")
+                .style("stroke", "black")
+                .attr("cx", 0)
+                .attr("cy", 0)
+                .attr("r",9)
+                .attr("fill", function(d) {return d});
+
+            var quantilesNegColor = [];
+            var numberOfIntervalsNegColor = negColorScale.range().length;
+            for (i=0; i<numberOfIntervalsNegColor+1; i++){
+                quantilesNegColor.push(d3.quantile(negColorScale.domain(),i/numberOfIntervalsNegColor));
+            };
+            quantilesNegColor.reverse();
