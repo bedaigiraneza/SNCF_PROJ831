@@ -533,3 +533,31 @@ function refreshVelo(acc1,acc2,i){
     svg_velo.attr("x",d3.select("#valeur_velo").attr("x"))
     svg_velo.attr("y",d3.select("#valeur_velo").attr("y"))
 }
+function refreshMotif(mot1,mot2,gare1,gare2){
+    motifSvg.selectAll("text").remove();
+    motifG.selectAll("*").remove();
+
+    var titre = motifSvg.append("text")
+        .attr("x",+d3.select("#motifSvg").attr("x")/2)
+        .attr("y",15)
+        .style("text-anchor","center")
+        .text("Why do people travel?")
+
+    var sum1=(mot1[1].commute+mot1[1].divers+mot1[1].etudes+mot1[1].occasionnel+mot1[1].loisirs),
+        sum2=(mot2[1].commute+mot2[1].divers+mot2[1].etudes+mot2[1].occasionnel+mot2[1].loisirs);
+
+    if(sum1==0 || sum2==0){
+
+        var chiffre = ""
+        if(sum1==0 && gare1!=null){chiffre= "1"}
+        if(sum2==0 && gare2!=null){chiffre= "2"}
+        if(sum1==0 && gare1!=null && sum2==0 && gare2!=null){chiffre="1 & station #2"}
+
+        motifSvg.append("text")
+            .text("Missing data for station #"+ chiffre)
+            .attr("x",0)
+            .attr("y",30)
+            .attr("font-size",10)
+            .style("font-style","italic")
+            .style("text-anchor","start")
+    };
