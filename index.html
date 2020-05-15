@@ -142,33 +142,32 @@
         d3.select("#radarChart").attr("style","display: inline-block; height: 318px; width: 49%;");
     };
 
-
-    function hasOneOrMore(d){
-        if(d>0){
-            return true;
+    function firstStationChange(data, gare1, gare2) {
+        transitionStrokeWidth(d3.select("#gares").selectAll("circle").filter(function(d){return (d.code == gare1); }));
+        transitionBorderWidth(d3.select("#firstChoiceZone"));
+        showStats();
+        CreateStat(data, gare1, gare2);
+        CreateGlyph(data, gare1, gare2);
+        if (gare1){
+            d3.select("#firstCross").attr("style","display: inline-block");
         }
-        else{
-            return false;
+        else {
+            d3.select("#firstCross").attr("style","display: none");
         }
     };
 
-    function showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox){
-        if (wifiBox.property("checked")){
-            selection = selection.filter(function(d){return (d.wifi == true); });
-        };
-        if (foosballBox.property("checked")){
-            selection = selection.filter(function(d){return (d.foosball == true); });
-        };
-        if (powerstationBox.property("checked")){
-            selection = selection.filter(function(d){return (d.powerstation == true); });
-        };
-        if (pianoBox.property("checked")){
-            selection = selection.filter(function(d){return (d.piano == true); });
-        };
-        if (storiesBox.property("checked")){
-            selection = selection.filter(function(d){return (d.stories == true); });
-        };
-        selection.transition().style("opacity", 1);
+    function secondStationChange(data, gare1, gare2) {
+        transitionStrokeWidth(d3.select("#gares").selectAll("circle").filter(function(d){return (d.code == gare2); }));
+        transitionBorderWidth(d3.select("#secondChoiceZone"));
+        showStats();
+        CreateStat(data, gare1, gare2);
+        CreateGlyph(data, gare1, gare2);
+        if (gare2){
+            d3.select("#secondCross").attr("style","display: inline-block");
+        }
+        else {
+            d3.select("#secondCross").attr("style","display: none");
+        }
     };
 
     function removeFiltersButton(filtersButton, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox){
