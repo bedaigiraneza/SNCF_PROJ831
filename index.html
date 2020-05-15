@@ -328,46 +328,36 @@
                     removeFiltersButton(filtersButton, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox);
                 }
             });
-         firstChoiceZone.append("button")
-                .attr("id","firstCross")
-                .attr("type","button")
-                .attr("style","display: none;")
-                .html("&#10060;")
-                .on("click", function(){
-                    gare1=null;
-                    var firstStationName = getName(nodes, gare1);
-                    firstDropdown.property("value", firstStationName);
-                    transitionBorderWidth(d3.select("#firstChoiceZone"));
-                    d3.select(this).attr("style", "display: none;")
-                    CreateStat(data, gare1, gare2);
-                    CreateGlyph(data, gare1, gare2);
-                });
 
-            var firstOptions = firstDropdown
-                .selectAll("option")
-                .data(nodes).enter()
-                .append("option")
-                .text(function(d) {return d.name; });
+            d3.select("button[name='clearFilters']").on("click",function(){
+                d3.select(this).style("display","none");
+                wifiBox.property("checked", false);
+                foosballBox.property("checked", false);
+                powerstationBox.property("checked", false);
+                pianoBox.property("checked", false);
+                storiesBox.property("checked", false);
+                gares.selectAll("circle").transition().style("opacity",1);
+            });
 
-            d3.select("#firstColumn").append("div").attr("style", "width:50%");
-
-            var secondChoiceZone = d3.select("#firstColumn")
+            var firstChoiceZone = d3.select("#firstColumn")
                 .append("div")
                 .attr("class","choiceZone")
-                .attr("id","secondChoiceZone")
-                .attr("style","border: 2px solid " + couleur2 + ";")
+                .attr("id","firstChoiceZone")
+                .attr("style","border: 2px solid " + couleur1 + ";")
 
-            secondText = secondChoiceZone.append("p").attr("class","choiceZone")
-            secondText.append("p").text("Station selected #2: ")
+            firstText = firstChoiceZone.append("p").attr("class","choiceZone")
+            firstText.append("p").text("Station selected #1: ")
 
-            var secondDropdown = secondChoiceZone.append("select")
+            var firstDropdown = firstChoiceZone.append("select")
                 .attr("class","choiceZone")
                 .attr("style","font-weight: bold;")
-                .on("change",function() {
+                .on("change",function(d) {
                     var nameSelected = d3.select(this).property("value");
-                    gare2 = getCode(nodes, nameSelected);
-                    secondStationChange(data, gare1, gare2);
+                    gare1 = getCode(nodes, nameSelected);
+                    firstStationChange(data, gare1, gare2);
                 });
+
+
 
             secondChoiceZone.append("button")
                 .attr("id","secondCross")
