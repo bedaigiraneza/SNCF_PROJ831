@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../SNCF_viz-master/.idea/SNCF_viz-master.iml" filepath="$PROJECT_DIR$/../SNCF_viz-master/.idea/SNCF_viz-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/SNCF_PROJ831.iml" filepath="$PROJECT_DIR$/.idea/SNCF_PROJ831.iml" />
     </modules>
   </component>
 </project>

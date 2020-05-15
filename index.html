@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <title>Comparaison des gares</title>
+    <script src="node_modules/d3/build/d3.min.js"></script>
+    <script src="CreateStat.js" charset="utf-8"></script>
+    <script src="CreateGlyph.js" charset="utf-8"></script>
+    <script src="radarchart.js" charset="utf-8"></script>
+
+    <style>
+        body {margin: 0; position: fixed; top: 0; right: 0; bottom: 0; left: 0; font-family: Arial;}
+        p {margin: 0; padding: 0}
+        .choiceZone {display: inline-block; margin: 2px;}
+        .hidden {display: none;}
+        div.tooltip {color: #222; background-color: #fff; padding: .5em; text-shadow: #f5f5f5 0 1px 0; border-radius: 2px; opacity: 0.9; position: absolute;}
+        rect {opacity: 1;}
+        .titre {font-weight: bold; font-size: 1.3em;}
+    </style>
+</head>
+
+<body>
+<div id="firstColumn" style="display: inline-block; float: left; height: 100%; width: 665px; padding-left: 15px;">
+    <div id="mapZone"></div>
+    <div class="choiceZone" style="font-size: 0.8em; width: 100%">
+        <p><strong style="text-align: left">Montrer les gares qui ont uniquement :</strong></p>
+        <p>
+            <label>Wifi<input type="checkbox" name="wifi" value="true"></label>
+            <label style="margin-left: 20px">Football table<input type="checkbox" name="foosball"></label>
+            <label style="margin-left: 20px">Station(s) de recharge<input type="checkbox" name="powerstation"></label>
+            <label style="margin-left: 20px">Piano(s)<input type="checkbox" name="piano"></label>
+            <label style="margin-left: 20px">Accès aux nouvelles<input type="checkbox" name="stories"></label>
+        </p>
+        <p><button type="button" name="clearFilters" style="margin-top: 4px; display: none;">Effacer tous les filtres</button>&nbsp;</p>
+        <br/>
+    </div>
+</div>
+<div id="separation" style="display: inline-block; float: left; height: 100%; width: 4px; background-color: grey;"></div>
+<div id="secondColumn" style="display: inline-block; float: left; height: 100%; width: 660px; padding-left: 15px;">
+    <div id = "start" style="height: 100%; width: 100%"><p class="titre" style="margin-top: 40%; text-align: center;">Veuillez choisir 1 ou 2 gare(s)</p></div>
+    <div id ="stat" style="display: none;"></div>
+    <div id = "barChart" style="display: none;"></div>
+    <div id ="radarChart" style="display: none;"></div>
+</div>
+<script>
+    var statSvg = d3.select("#stat").append("svg")
+        .attr("id","statSvg")
+        .attr("width", 700)
+        .attr("height", 400);
+
+    var statG = statSvg.append("g")
+        .attr("id","statG")
+        .attr("transform","translate(0,30)");
+
+    var motifSvg = d3.select("#barChart").append("svg")
+        .attr("id","motifSvg")
+        .attr("width", 350)
+        .attr("height",340);
+
+    var motifG = motifSvg.append("g")
+        .attr("id","histo_motif")
+        .attr("transform","translate(30,50)");
+
+    var couleur1 = "#41A9E1",
+        couleur2 = "#FF8C00",
+        couleur3 = "#D3D3D3",
+        w_rect = 18,
+        h_rect = 36,
+        x_divertissements1 = 220,
+        x_divertissements2= x_divertissements1 + w_rect,
+        y_divertissements = 125,
+        y_acces = 190;
+
+    var width = 650,
+        height = 470;
+
+    var svg = d3.select("#mapZone")
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    svg.append("text")
+        .attr("class","titre")
+        .attr("y",30)
+        .text("Sélection des gares");
+
+    var tooltip = d3.select("#firstColumn").append("div")
+        .attr("class", "hidden tooltip");
+
+    var projection = d3.geoConicConformal().center([2.454071, 46.279229]).scale(2800)
+        .translate([width/2.3, height/1.8]);
+
+    var path = d3.geoPath()
+        .projection(projection);
+
+    var radiusScale = d3.scaleQuantile()
+        .range([2,3,4,6,7,9]);
+
+    var negColorScale = d3.scaleQuantile()
+        .range(["rgb(255, 0, 0)","rgb(255, 86, 86)","rgb(255, 166, 166)","rgb(255, 224, 224)"]);
+
+    var posColorScale = d3.scaleQuantile()
+        .range(["rgb(177, 236, 177)","rgb(124, 192, 124)","rgb(68, 162, 68)","rgb(0, 128, 0)"]);
+
+    function colorQuantile(variation) {
+        if (variation<0){return negColorScale(variation); }
+        else if (variation>0) {return posColorScale(variation); }
+        else {return "white"; };
+    };
+
+    var gare1 = null;
+    var gare2 = null;
+
+    function colorInteraction() {
+        if (gare1) {return couleur2; }
+        else {return couleur1; };
+    }
+
+    function getCode(list, name) {
+        return list.find(function(d) {if (d.name == name) {return d; }}).code;
+    };
+
+    function getName(list, code) {
+        return list.find(function(d) {if (d.code == code) {return d; }}).name;
+    };
+
+    function transitionStrokeWidth(element) {
+        element
+            .transition().duration(400).style("stroke-width", 10)
+            .transition().style("stroke-width", 1);
+    };
+
+    function transitionBorderWidth(element) {
+        element
+            .transition().duration(400).style("border-width", "6px")
+            .transition().style("border-width", "2px");
+    };
+
+    function showStats() {
+        d3.select("#start").attr("style","display: none;");
+        d3.select("#stat").attr("style","display: block; height: 318px; width: 100%;");
+        d3.select("#barChart").attr("style","display: inline-block; height: 318px; width: 49%;")
+        d3.select("#radarChart").attr("style","display: inline-block; height: 318px; width: 49%;");
+    };
+
+    function firstStationChange(data, gare1, gare2) {
+        transitionStrokeWidth(d3.select("#gares").selectAll("circle").filter(function(d){return (d.code == gare1); }));
+        transitionBorderWidth(d3.select("#firstChoiceZone"));
+        showStats();
+        CreateStat(data, gare1, gare2);
+        CreateGlyph(data, gare1, gare2);
+        if (gare1){
+            d3.select("#firstCross").attr("style","display: inline-block");
+        }
+        else {
+            d3.select("#firstCross").attr("style","display: none");
+        }
+    };
+
+    function secondStationChange(data, gare1, gare2) {
+        transitionStrokeWidth(d3.select("#gares").selectAll("circle").filter(function(d){return (d.code == gare2); }));
+        transitionBorderWidth(d3.select("#secondChoiceZone"));
+        showStats();
+        CreateStat(data, gare1, gare2);
+        CreateGlyph(data, gare1, gare2);
+        if (gare2){
+            d3.select("#secondCross").attr("style","display: inline-block");
+        }
+        else {
+            d3.select("#secondCross").attr("style","display: none");
+        }
+    };
+
+    function hasOneOrMore(d){
+        if(d>0){
+            return true;
+        }
+        else{
+            return false;
+        }
+    };
+
+    function showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox){
+        if (wifiBox.property("checked")){
+            selection = selection.filter(function(d){return (d.wifi == true); });
+        };
+        if (foosballBox.property("checked")){
+            selection = selection.filter(function(d){return (d.foosball == true); });
+        };
+        if (powerstationBox.property("checked")){
+            selection = selection.filter(function(d){return (d.powerstation == true); });
+        };
+        if (pianoBox.property("checked")){
+            selection = selection.filter(function(d){return (d.piano == true); });
+        };
+        if (storiesBox.property("checked")){
+            selection = selection.filter(function(d){return (d.stories == true); });
+        };
+        selection.transition().style("opacity", 1);
+    };
+
+    function removeFiltersButton(filtersButton, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox){
+        if ((wifiBox.property("checked") == false) && (foosballBox.property("checked") == false) && (powerstationBox.property("checked") == false) && (pianoBox.property("checked") == false) && (storiesBox.property("checked") == false)){
+            filtersButton.style("display","none");
+        };
+    };
+
+    d3.json("cleaned_datasets/regions.geojson", function(json) {
+        d3.csv("cleaned_datasets/all-joined-datasets.csv", function(data) {
+
+            radiusScale.domain(data.map(function(d) {return +d.voyageurs_2016; }));
+
+            var regions = svg.append("g").attr("id","regions");
+
+            var fond = regions.selectAll("g").data(json.features).enter().append("g")
+                .append("path")
+                .attr("d", path)
+                .attr("fill","#FFFCD1")
+                .attr("stroke","#FEB162");
+
+            var gares = svg.append("g").attr("id","gares");
+            var nodes = [{
+                code: null,
+                radius: null,
+                color: null,
+                cx: null,
+                cy: null,
+                name: "- Aucune gare selectionnée -",
+                county: null,
+                region: null,
+                wifi: null,
+                foosball: null,
+                powerstation: null,
+                piano: null,
+                stories: null
+            }];
+
+            data.forEach(function (d) {
+                var proj = projection([d.Longitude_WGS84,d.Latitude_WGS84]);
+                nodes.push({
+                    code: d.Code_UIC,
+                    radius: radiusScale(+d.voyageurs_2016),
+                    variation: +d.Variations,
+                    x: proj[0],
+                    y: proj[1],
+                    name: d.Nom_de_la_gare,
+                    county: d.Departement,
+                    region: d.Region,
+                    wifi: (d.Wifi === "true"),
+                    foosball: hasOneOrMore(+d.Baby_Foot),
+                    powerstation: hasOneOrMore(+d.Power_Station),
+                    piano: hasOneOrMore(+d.Piano),
+                    stories: hasOneOrMore(+d.Distr_Histoires_Courtes)
+                });
+            });
+
+            nodes.sort(function(a,b) {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0); });
+            negColorScale.domain(nodes.map(function(d) {if (d.variation<0) {return d.variation; }}));
+            posColorScale.domain(nodes.map(function(d) {if (d.variation>0) {return d.variation; }}));
+
+            var wifiBox = d3.select("input[name='wifi']"),
+                foosballBox = d3.select("input[name='foosball']"),
+                powerstationBox = d3.select("input[name='powerstation']"),
+                pianoBox = d3.select("input[name='piano']"),
+                storiesBox = d3.select("input[name='stories']")
+            filtersButton = d3.select("button[name='clearFilters']");
+
+            wifiBox.on("change",function(){
+                var selection =  d3.select("#gares").selectAll("circle").filter(function(d){return (d.wifi == false); })
+                if (d3.select(this).property("checked")){
+                    filtersButton.style("display","inline-block");
+                    selection
+                        .transition()
+                        .style("opacity",0.08); }
+                else {
+                    showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox)
+                    removeFiltersButton(filtersButton, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox);
+                }
+            });
+
+            foosballBox.on("change",function(){
+                var selection =  d3.select("#gares").selectAll("circle").filter(function(d){return (d.foosball == false); })
+                if (d3.select(this).property("checked")){
+                    filtersButton.style("display","inline-block");
+                    selection
+                        .transition()
+                        .style("opacity",0.08); }
+                else {
+                    showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox)
+                    removeFiltersButton(filtersButton, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox);
+                }
+            });
+
+            powerstationBox.on("change",function(){
+                var selection =  d3.select("#gares").selectAll("circle").filter(function(d){return (d.powerstation == false); })
+                if (d3.select(this).property("checked")){
+                    filtersButton.style("display","inline-block");
+                    selection
+                        .transition()
+                        .style("opacity",0.08); }
+                else {
+                    showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox)
+                    removeFiltersButton(filtersButton, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox);
+                }
+            });
+
+            pianoBox.on("change",function(){
+                var selection =  d3.select("#gares").selectAll("circle").filter(function(d){return (d.piano == false); })
+                if (d3.select(this).property("checked")){
+                    filtersButton.style("display","inline-block");
+                    selection
+                        .transition()
+                        .style("opacity",0.08); }
+                else {
+                    showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox)
+                    removeFiltersButton(filtersButton, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox);
+                }
+            });
+
+            storiesBox.on("change",function(){
+                var selection =  d3.select("#gares").selectAll("circle").filter(function(d){return (d.stories == false); })
+                if (d3.select(this).property("checked")){
+                    filtersButton.style("display","inline-block");
+                    selection
+                        .transition()
+                        .style("opacity",0.08); }
+                else {
+                    showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox)
+                    removeFiltersButton(filtersButton, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox);
+                }
+            });
+
+            d3.select("button[name='clearFilters']").on("click",function(){
+                d3.select(this).style("display","none");
+                wifiBox.property("checked", false);
+                foosballBox.property("checked", false);
+                powerstationBox.property("checked", false);
+                pianoBox.property("checked", false);
+                storiesBox.property("checked", false);
+                gares.selectAll("circle").transition().style("opacity",1);
+            });
+
+            var firstChoiceZone = d3.select("#firstColumn")
+                .append("div")
+                .attr("class","choiceZone")
+                .attr("id","firstChoiceZone")
+                .attr("style","border: 2px solid " + couleur1 + ";")
+
+            firstText = firstChoiceZone.append("p").attr("class","choiceZone")
+            firstText.append("p").text("Gare selectionnée #1: ")
+
+            var firstDropdown = firstChoiceZone.append("select")
+                .attr("class","choiceZone")
+                .attr("style","font-weight: bold;")
+                .on("change",function(d) {
+                    var nameSelected = d3.select(this).property("value");
+                    gare1 = getCode(nodes, nameSelected);
+                    firstStationChange(data, gare1, gare2);
+                });
+
+            firstChoiceZone.append("button")
+                .attr("id","firstCross")
+                .attr("type","button")
+                .attr("style","display: none;")
+                .html("&#10060;")
+                .on("click", function(){
+                    gare1=null;
+                    var firstStationName = getName(nodes, gare1);
+                    firstDropdown.property("value", firstStationName);
+                    transitionBorderWidth(d3.select("#firstChoiceZone"));
+                    d3.select(this).attr("style", "display: none;")
+                    CreateStat(data, gare1, gare2);
+                    CreateGlyph(data, gare1, gare2);
+                });
+
+            var firstOptions = firstDropdown
+                .selectAll("option")
+                .data(nodes).enter()
+                .append("option")
+                .text(function(d) {return d.name; });
+
+            d3.select("#firstColumn").append("div").attr("style", "width:50%");
+
+            var secondChoiceZone = d3.select("#firstColumn")
+                .append("div")
+                .attr("class","choiceZone")
+                .attr("id","secondChoiceZone")
+                .attr("style","border: 2px solid " + couleur2 + ";")
+
+            secondText = secondChoiceZone.append("p").attr("class","choiceZone")
+            secondText.append("p").text("Gare selectionnée #2: ")
+
+            var secondDropdown = secondChoiceZone.append("select")
+                .attr("class","choiceZone")
+                .attr("style","font-weight: bold;")
+                .on("change",function() {
+                    var nameSelected = d3.select(this).property("value");
+                    gare2 = getCode(nodes, nameSelected);
+                    secondStationChange(data, gare1, gare2);
+                });
+
+            secondChoiceZone.append("button")
+                .attr("id","secondCross")
+                .attr("type","button")
+                .attr("style","display: none;")
+                .html("&#10060;")
+                .on("click", function(){
+                    gare2=null;
+                    var secondStationName = getName(nodes, gare2);
+                    secondDropdown.property("value", secondStationName);
+                    transitionBorderWidth(d3.select("#secondChoiceZone"));
+                    d3.select(this).attr("style", "display: none;");
+                    CreateStat(data, gare1, gare2);
+                    CreateGlyph(data, gare1, gare2);
+                });
+
+            var secondOptions = secondDropdown
+                .selectAll("option")
+                .data(nodes).enter()
+                .append("option")
+                .text(function(d) {return d.name; });
+
+            var simulation = d3.forceSimulation(nodes)
+                .force("x", d3.forceX(function(d) {return d.x; }).strength(0.55))
+                .force("y", d3.forceY(function(d) {return d.y; }).strength(0.55))
+                .force("collide", d3.forceCollide().radius(function(d) { return d.radius + 0.3; }))
+                .stop();
+
+            for (i=0; i<100; i++) {simulation.tick(); }
+
+            var gare = gares.selectAll("circle").data(nodes);
+
+            gare.enter()
+                .append("circle")
+                .attr("r", function(d) {return d.radius; })
+                .style("stroke","black")
+                .attr("fill", function(d) {return colorQuantile(d.variation); })
+                .on("mousemove", function(d) {
+                    var mouse = d3.mouse(svg.node()).map(function(d) {return parseInt(d); });
+                    tooltip.classed("hidden", false)
+                        .attr("style", "left:" + (mouse[0] + 30) + "px; top:" + (mouse[1] - 35) + "px; border: 2px solid "+colorInteraction())
+                        .html("<p><strong>"+d.name+"</strong></p><p>Departement: "+d.county+"</p><p>Region: "+d.region+"</p>");
+                })
+                .on("mouseenter", function(){
+                    d3.select(this).transition().attr("fill", colorInteraction());
+                })
+                .on("mouseleave", function(){
+                    d3.select(this).transition().attr("fill", function(d){return colorQuantile(d.variation); }).style("stroke-width", 1);
+                    tooltip.classed("hidden", true);
+                })
+                .on("click", function(d){
+                    showStats();
+                    if (gare1) {
+                        gare2 = d.code;
+                        var secondStationName = getName(nodes, gare2);
+                        secondDropdown.property("value", secondStationName);
+                        secondStationChange(data, gare1, gare2);
+                    }
+                    else {
+                        gare1 = d.code;
+                        var firstStationName = getName(nodes, gare1);
+                        firstDropdown.property("value", firstStationName);
+                        firstStationChange(data, gare1, gare2);
+                    }
+                })
+                .merge(gare)
+                .attr("cx", function(d) {return d.x; })
+                .attr("cy", function(d) {return d.y; });
+
+            var legend = svg.append("g")
+                .attr("class","legend")
+                .attr("transform", function(d) {return "translate(" + (width -150) + "," + 60 + ")"; });
+
+            var legendRadius = legend.append("g").attr("id","radius");
+
+            legendRadius.append("text").attr("style","font-size: 0.8em; font-weight: bold;").text("Voyageurs 2019:");
+
+            var eachRadius = legendRadius.selectAll("g")
+                .data(radiusScale.range().reverse())
+                .enter()
+                .append("g")
+                .attr("transform", function(d,i) {return "translate(" + 15 + "," + (20+i*20) +")"; });
+
+            eachRadius.append("circle")
+                .attr("fill", "white")
+                .style("stroke", "black")
+                .attr("cx", 0)
+                .attr("cy", 0)
+                .attr("r", function(d) {return d; });
+
+            var quantilesRadius = [];
+            var numberOfIntervalsRadius = radiusScale.range().length;
+            for (i=0; i<numberOfIntervalsRadius+1; i++){
+                quantilesRadius.push(d3.quantile(radiusScale.domain(),i/numberOfIntervalsRadius));
+            };
+            quantilesRadius.reverse();
+
+            eachRadius.append("text")
+                .attr("transform", function(d,i) {return "translate(" + 15 + ",3)"; })
+                .attr("style","font-size: 0.7em;")
+                .text(function(d,i) {return "From "+d3.format(".2s")(quantilesRadius[i+1])+" to "+d3.format(".2s")(quantilesRadius[i]); } );
+
+            eachRadius
+                .on("mouseenter", function(d){
+                    legendRadius.selectAll("g").filter(function(e){return (e !== d); }).transition().style("opacity", 0.08);
+                    gares.selectAll("circle").filter(function(e){return (e.radius !== d); })
+                        .transition().style("opacity", 0.08);
+                })
+                .on("mouseleave", function(d){
+                    legendRadius.selectAll("g").transition().style("opacity", 1);
+                    var selection = gares.selectAll("circle").filter(function(e){return (e.radius !== d); })
+                    showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox);
+                });
+
+            var legendColor = legend.append("g").attr("id","colorQuantile").attr("transform","translate(0,"+20*(numberOfIntervalsRadius+3)+")");
+
+            var colorText = legendColor.append("text")
+                .attr("style","font-size: 0.8em; font-weight: bold;")
+                .attr("x",0)
+                .text("Fluctuation 2019 / 2018:");
+
+            var eachPosColor = legendColor.selectAll(".positive")
+                .data(posColorScale.range().reverse())
+                .enter()
+                .append("g")
+                .attr("class","positive")
+                .attr("transform", function(d,i) {return "translate(" + 15 + "," + (20+i*19) +")"; });
+
+            eachPosColor.append("circle")
+                .style("stroke", "black")
+                .attr("cx", 0)
+                .attr("cy", 0)
+                .attr("r",9)
+                .attr("fill", function(d) {return d});
+
+            var quantilesPosColor = [];
+            var numberOfIntervalsPosColor = posColorScale.range().length;
+            for (i=0; i<numberOfIntervalsPosColor+1; i++){
+                quantilesPosColor.push(d3.quantile(posColorScale.domain(),i/numberOfIntervalsPosColor));
+            };
+            quantilesPosColor.reverse();
+
+            eachPosColor.append("text")
+                .attr("transform", function(d,i) {return "translate(" + 25 + ",3)"; })
+                .attr("style","font-size: 0.7em;")
+                .text(function(d,i) {return "De +"+d3.format(".0%")(quantilesPosColor[i+1])+" à +"+d3.format(".0%")(quantilesPosColor[i]); } );
+
+            eachPosColor
+                .on("mouseenter", function(d){
+                    legendColor.selectAll("g").filter(function(e){return (e !== d); }).transition().style("opacity", 0.08);
+                    gares.selectAll("circle").filter(function(e){return (colorQuantile(e.variation) !== d); })
+                        .transition().style("opacity", 0.08);
+                })
+                .on("mouseleave", function(d){
+                    legendColor.selectAll("g").transition().style("opacity", 1);
+                    var selection = gares.selectAll("circle").filter(function(e){return (colorQuantile(e.variation) !== d); })
+                    showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox);
+                });
+
+            var eachNegColor = legendColor.selectAll(".negative")
+                .data(negColorScale.range().reverse())
+                .enter()
+                .append("g")
+                .attr("class","negative")
+                .attr("transform", function(d,i) {return "translate(" + 15 + "," + (20+19*numberOfIntervalsPosColor+i*19) +")"; });
+
+            eachNegColor.append("circle")
+                .style("stroke", "black")
+                .attr("cx", 0)
+                .attr("cy", 0)
+                .attr("r",9)
+                .attr("fill", function(d) {return d});
+
+            var quantilesNegColor = [];
+            var numberOfIntervalsNegColor = negColorScale.range().length;
+            for (i=0; i<numberOfIntervalsNegColor+1; i++){
+                quantilesNegColor.push(d3.quantile(negColorScale.domain(),i/numberOfIntervalsNegColor));
+            };
+            quantilesNegColor.reverse();
+
+            eachNegColor.append("text")
+                .attr("transform", function(d,i) {return "translate(" + 25 + ",3)"; })
+                .attr("style","font-size: 0.7em;")
+                .text(function(d,i) {return "From "+d3.format(".0%")(quantilesNegColor[i+1])+" to "+d3.format(".0%")(quantilesNegColor[i]); } );
+
+            eachNegColor
+                .on("mouseenter", function(d){
+                    legendColor.selectAll("g").filter(function(e){return (e !== d); }).transition().style("opacity", 0.08);
+                    gares.selectAll("circle").filter(function(e){return (colorQuantile(e.variation) !== d); })
+                        .transition().style("opacity", 0.08);
+                })
+                .on("mouseleave", function(d){
+                    legendColor.selectAll("g").transition().style("opacity", 1);
+                    var selection = gares.selectAll("circle").filter(function(e){return (colorQuantile(e.variation) !== d); })
+                    showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox);
+                });
+        });
+    });
+</script>
+</body>
