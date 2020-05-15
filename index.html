@@ -252,8 +252,20 @@
                     stories: hasOneOrMore(+d.Distr_Histoires_Courtes)
                 });
             });
-   foosballBox.on("change",function(){
-                var selection =  d3.select("#gares").selectAll("circle").filter(function(d){return (d.foosball == false); })
+
+            nodes.sort(function(a,b) {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0); });
+            negColorScale.domain(nodes.map(function(d) {if (d.variation<0) {return d.variation; }}));
+            posColorScale.domain(nodes.map(function(d) {if (d.variation>0) {return d.variation; }}));
+
+            var wifiBox = d3.select("input[name='wifi']"),
+                foosballBox = d3.select("input[name='foosball']"),
+                powerstationBox = d3.select("input[name='powerstation']"),
+                pianoBox = d3.select("input[name='piano']"),
+                storiesBox = d3.select("input[name='stories']")
+            filtersButton = d3.select("button[name='clearFilters']");
+
+            wifiBox.on("change",function(){
+                var selection =  d3.select("#gares").selectAll("circle").filter(function(d){return (d.wifi == false); })
                 if (d3.select(this).property("checked")){
                     filtersButton.style("display","inline-block");
                     selection
@@ -265,18 +277,6 @@
                 }
             });
 
-            powerstationBox.on("change",function(){
-                var selection =  d3.select("#gares").selectAll("circle").filter(function(d){return (d.powerstation == false); })
-                if (d3.select(this).property("checked")){
-                    filtersButton.style("display","inline-block");
-                    selection
-                        .transition()
-                        .style("opacity",0.08); }
-                else {
-                    showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox)
-                    removeFiltersButton(filtersButton, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox);
-                }
-            });
 
             pianoBox.on("change",function(){
                 var selection =  d3.select("#gares").selectAll("circle").filter(function(d){return (d.piano == false); })
