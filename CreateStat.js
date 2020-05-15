@@ -655,3 +655,67 @@ function refreshMotif(mot1,mot2,gare1,gare2){
         .style("fill",couleur2)
 }
 
+function refreshDiv(div1,div2,gare1,gare2){
+
+    var new_div = []
+    new_div.push(["wifi",div1[1].wifi,div2[1].wifi])
+    new_div.push(["baby_foot",div1[1].baby_foot,div2[1].baby_foot])
+    new_div.push(["powerstation",div1[1].powerstation,div2[1].powerstation])
+    new_div.push(["piano",div1[1].piano,div2[1].piano])
+    new_div.push(["histoires",div1[1].histoires,div2[1].histoires])
+
+    var new_div1 = [],
+        new_div2 = [];
+
+    for(var n=0;n<new_div.length;n++){
+
+        if(new_div[n][1]=="true" || new_div[n][2]=="true"){
+            new_div1.push([new_div[n][0],new_div[n][1]])
+            new_div2.push([new_div[n][0],new_div[n][2]])
+        };
+
+        if(new_div[n][1]>0 || new_div[n][2]>0){
+            new_div1.push([new_div[n][0],new_div[n][1]])
+            new_div2.push([new_div[n][0],new_div[n][2]])
+        };
+    };
+
+    var i = new_div1.length;
+
+    for(var indice=0;indice<i;indice++){ // debut for
+
+        if(new_div1[indice][0]=='wifi'){refreshWifi(new_div1,new_div2,indice)}
+        if(new_div1[indice][0]=='baby_foot'){refreshBaby(new_div1,new_div2,indice)}
+        if(new_div1[indice][0]=='powerstation'){refreshPower(new_div1,new_div2,indice)}
+        if(new_div1[indice][0]=='piano'){refreshPiano(new_div1,new_div2,indice)}
+        if(new_div1[indice][0]=='histoires'){refreshBook(new_div1,new_div2,indice)}
+
+    }
+
+    var sum1 = 0,
+        sum2 = 0;
+
+    for(var n=1;n<new_div1.length;n++){
+        sum1=+new_div1[n][1]+sum1
+        sum2=+new_div2[n][1]+sum2
+    };
+
+    console.log(sum1)
+    console.log(sum2)
+
+    if(sum1==0 || sum2==0){
+        var g_infosdiv = statG.append("g")
+        var chiffre = ""
+        if(sum1==0 && gare1!=null){chiffre= "1"}
+        if(sum2==0 && gare2!=null){chiffre= "2"}
+        if(sum1==0 && gare1!=null && sum2==0 && gare2!=null){chiffre="1 & station #2"}
+
+        g_infosdiv.append("text")
+            .text("Missing data for station #"+ chiffre)
+            .attr("x",x_divertissements1)
+            .attr("y",y_divertissements+45)
+            .attr("font-size",10)
+            .style("font-style","italic")
+            .style("text-anchor","start")
+    };
+};
