@@ -466,26 +466,50 @@
                 .attr("cx", function(d) {return d.x; })
                 .attr("cy", function(d) {return d.y; });
 
-            var legendColor = legend.append("g").attr("id","colorQuantile").attr("transform","translate(0,"+20*(numberOfIntervalsRadius+3)+")");
+            var legend = svg.append("g")
+                .attr("class","legend")
+                .attr("transform", function(d) {return "translate(" + (width -150) + "," + 60 + ")"; });
 
-            var colorText = legendColor.append("text")
-                .attr("style","font-size: 0.8em; font-weight: bold;")
-                .attr("x",0)
-                .text("Fluctuation 2016 / 2015:");
+            var legendRadius = legend.append("g").attr("id","radius");
 
-            var eachPosColor = legendColor.selectAll(".positive")
-                .data(posColorScale.range().reverse())
+            legendRadius.append("text").attr("style","font-size: 0.8em; font-weight: bold;").text("Travallers in 2016:");
+
+            var eachRadius = legendRadius.selectAll("g")
+                .data(radiusScale.range().reverse())
                 .enter()
                 .append("g")
-                .attr("class","positive")
-                .attr("transform", function(d,i) {return "translate(" + 15 + "," + (20+i*19) +")"; });
+                .attr("transform", function(d,i) {return "translate(" + 15 + "," + (20+i*20) +")"; });
 
-            eachPosColor.append("circle")
+            eachRadius.append("circle")
+                .attr("fill", "white")
                 .style("stroke", "black")
                 .attr("cx", 0)
                 .attr("cy", 0)
-                .attr("r",9)
-                .attr("fill", function(d) {return d});
+                .attr("r", function(d) {return d; });
+
+            var quantilesRadius = [];
+            var numberOfIntervalsRadius = radiusScale.range().length;
+            for (i=0; i<numberOfIntervalsRadius+1; i++){
+                quantilesRadius.push(d3.quantile(radiusScale.domain(),i/numberOfIntervalsRadius));
+            };
+            quantilesRadius.reverse();
+
+            eachRadius.append("text")
+                .attr("transform", function(d,i) {return "translate(" + 15 + ",3)"; })
+                .attr("style","font-size: 0.7em;")
+                .text(function(d,i) {return "From "+d3.format(".2s")(quantilesRadius[i+1])+" to "+d3.format(".2s")(quantilesRadius[i]); } );
+
+            eachRadius
+                .on("mouseenter", function(d){
+                    legendRadius.selectAll("g").filter(function(e){return (e !== d); }).transition().style("opacity", 0.08);
+                    gares.selectAll("circle").filter(function(e){return (e.radius !== d); })
+                        .transition().style("opacity", 0.08);
+                })
+                .on("mouseleave", function(d){
+                    legendRadius.selectAll("g").transition().style("opacity", 1);
+                    var selection = gares.selectAll("circle").filter(function(e){return (e.radius !== d); })
+                    showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox);
+                });
 
             var quantilesPosColor = [];
             var numberOfIntervalsPosColor = posColorScale.range().length;
