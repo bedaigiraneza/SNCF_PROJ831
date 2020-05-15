@@ -198,41 +198,24 @@
         selection.transition().style("opacity", 1);
     };
 
-            var gares = svg.append("g").attr("id","gares");
-            var nodes = [{
-                code: null,
-                radius: null,
-                color: null,
-                cx: null,
-                cy: null,
-                name: "- No station selected -",
-                county: null,
-                region: null,
-                wifi: null,
-                foosball: null,
-                powerstation: null,
-                piano: null,
-                stories: null
-            }];
+    function removeFiltersButton(filtersButton, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox){
+        if ((wifiBox.property("checked") == false) && (foosballBox.property("checked") == false) && (powerstationBox.property("checked") == false) && (pianoBox.property("checked") == false) && (storiesBox.property("checked") == false)){
+            filtersButton.style("display","none");
+        };
+    };
 
-            data.forEach(function (d) {
-                var proj = projection([d.Longitude_WGS84,d.Latitude_WGS84]);
-                nodes.push({
-                    code: d.Code_UIC,
-                    radius: radiusScale(+d.voyageurs_2016),
-                    variation: +d.Variations,
-                    x: proj[0],
-                    y: proj[1],
-                    name: d.Nom_de_la_gare,
-                    county: d.Departement,
-                    region: d.Region,
-                    wifi: (d.Wifi === "true"),
-                    foosball: hasOneOrMore(+d.Baby_Foot),
-                    powerstation: hasOneOrMore(+d.Power_Station),
-                    piano: hasOneOrMore(+d.Piano),
-                    stories: hasOneOrMore(+d.Distr_Histoires_Courtes)
-                });
-            });
+    d3.json("cleaned_datasets/regions.geojson", function(json) {
+        d3.csv("cleaned_datasets/all-joined-datasets.csv", function(data) {
+
+            radiusScale.domain(data.map(function(d) {return +d.voyageurs_2016; }));
+
+            var regions = svg.append("g").attr("id","regions");
+
+            var fond = regions.selectAll("g").data(json.features).enter().append("g")
+                .append("path")
+                .attr("d", path)
+                .attr("fill","#FFFCD1")
+                .attr("stroke","#FEB162");
 
             nodes.sort(function(a,b) {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0); });
             negColorScale.domain(nodes.map(function(d) {if (d.variation<0) {return d.variation; }}));
