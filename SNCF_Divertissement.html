@@ -166,6 +166,150 @@ d3.csv("all-joined-datasets.csv",function(data){
             .attr("text-anchor","start")
 
 
+      // emplacement du text 'nombre de voyageurs'
+      svg.append("text")
+              .attr("id","Nombredevoyageurs")
+              .text("Nombre de voyageurs")
+              .attr("y", 30 + margin.top)
+              .attr("x", 0 + margin.left)
+              .attr("text-anchor","start")
+
+      // emplacement de la valeur correspondante pour la gare 1
+      svg.append("text")
+              .attr("id","valeur_voyageurs")
+              .text("")
+              .attr("y", 30 + margin.top)
+              .attr("x",function(){return d3.select("#Nombredevoyageurs").attr("x")+275})
+              .attr("text-anchor","end")
+
+      // emplacement de la valeur correspondante pour la gare 2
+      svg.append("text")
+              .attr("id","valeur_voyageurs2")
+              .text("")
+              .attr("y", 30 + margin.top)
+              .attr("x", function(){return d3.select("#Nombredevoyageurs").attr("x")+350})
+              .attr("text-anchor","start")
+
+      // emplacement du text 'variation par rapport à 2015'
+      svg.append("text")
+              .attr("id","Variation")
+              .text("Variation par rapport à 2015")
+              .attr("y", 60 + margin.top)
+              .attr("x", 0 + margin.left)
+              .attr("text-anchor","start")
+
+      // emplacement de la valeur correspondante pour la gare 1
+      svg.append("text")
+              .attr("id","valeur_variation")
+              .text("")
+              .attr("y", 78 + margin.left)
+              .attr("x", function(){return d3.select("#Variation").attr("x")+275})
+              .style("text-anchor","end")
+
+      // emplacement de la valeur correspondante pour la gare 2
+      svg.append("text")
+              .attr("id","valeur_variation2")
+              .text("")
+              .attr("y", 78 + margin.left)
+              .attr("x", function(){return d3.select("#Variation").attr("x")+350})
+              .style("text-anchor","start")
+
+      // emplacement du text 'Divertissement'
+      svg.append("text")
+              .attr("id","Wifi")
+              .text("Divertissements")
+              .attr("y", 100 + margin.top)
+              .attr("x", 0 + margin.left)
+              .attr("text-anchor","start")
+
+      // emplacement du text "Moyens d'acces"
+      svg.append("text")
+              .attr("id","Moyenacces")
+              .text("Moyens d'accès")
+              .attr("y", 145 + margin.top)
+              .attr("x", 0 + margin.left)
+              .attr("text-anchor","start")
+
+      // emplacement du text "Motif du déplacement"
+      svg.append("text")
+              .attr("id","Motifsdeplacements")
+              .text("Motif du déplacement")
+              .attr("y", 190 + margin.top)
+              .attr("x", 150 )
+              .attr("text-anchor","start")
+
+      // emplacement du text 'nombre de voyageurs'
+      svg.append("text")
+              .attr("id","Nombredevoyageurs")
+              .text("Nombre de voyageurs")
+              .attr("y", 30 + margin.top)
+              .attr("x", 0 + margin.left)
+              .attr("text-anchor","start")
+
+      // emplacement de la valeur correspondante pour la gare 1
+      svg.append("text")
+              .attr("id","valeur_voyageurs")
+              .text("")
+              .attr("y", 30 + margin.top)
+              .attr("x",function(){return d3.select("#Nombredevoyageurs").attr("x")+275})
+              .attr("text-anchor","end")
+
+      // emplacement de la valeur correspondante pour la gare 2
+      svg.append("text")
+              .attr("id","valeur_voyageurs2")
+              .text("")
+              .attr("y", 30 + margin.top)
+              .attr("x", function(){return d3.select("#Nombredevoyageurs").attr("x")+350})
+              .attr("text-anchor","start")
+
+      // emplacement du text 'variation par rapport à 2015'
+      svg.append("text")
+              .attr("id","Variation")
+              .text("Variation par rapport à 2015")
+              .attr("y", 60 + margin.top)
+              .attr("x", 0 + margin.left)
+              .attr("text-anchor","start")
+
+      // emplacement de la valeur correspondante pour la gare 1
+      svg.append("text")
+              .attr("id","valeur_variation")
+              .text("")
+              .attr("y", 78 + margin.left)
+              .attr("x", function(){return d3.select("#Variation").attr("x")+275})
+              .style("text-anchor","end")
+
+      // emplacement de la valeur correspondante pour la gare 2
+      svg.append("text")
+              .attr("id","valeur_variation2")
+              .text("")
+              .attr("y", 78 + margin.left)
+              .attr("x", function(){return d3.select("#Variation").attr("x")+350})
+              .style("text-anchor","start")
+
+      // emplacement du text 'Divertissement'
+      svg.append("text")
+              .attr("id","Wifi")
+              .text("Divertissements")
+              .attr("y", 100 + margin.top)
+              .attr("x", 0 + margin.left)
+              .attr("text-anchor","start")
+
+      // emplacement du text "Moyens d'acces"
+      svg.append("text")
+              .attr("id","Moyenacces")
+              .text("Moyens d'accès")
+              .attr("y", 145 + margin.top)
+              .attr("x", 0 + margin.left)
+              .attr("text-anchor","start")
+
+      // emplacement du text "Motif du déplacement"
+      svg.append("text")
+              .attr("id","Motifsdeplacements")
+              .text("Motif du déplacement")
+              .attr("y", 190 + margin.top)
+              .attr("x", 150 )
+              .attr("text-anchor","start")
+
   </script>
 </div>
 </body>
