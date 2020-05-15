@@ -170,24 +170,33 @@
         }
     };
 
-    function removeFiltersButton(filtersButton, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox){
-        if ((wifiBox.property("checked") == false) && (foosballBox.property("checked") == false) && (powerstationBox.property("checked") == false) && (pianoBox.property("checked") == false) && (storiesBox.property("checked") == false)){
-            filtersButton.style("display","none");
-        };
+    function hasOneOrMore(d){
+        if(d>0){
+            return true;
+        }
+        else{
+            return false;
+        }
     };
 
-    d3.json("cleaned_datasets/regions.geojson", function(json) {
-        d3.csv("cleaned_datasets/all-joined-datasets.csv", function(data) {
-
-            radiusScale.domain(data.map(function(d) {return +d.voyageurs_2016; }));
-
-            var regions = svg.append("g").attr("id","regions");
-
-            var fond = regions.selectAll("g").data(json.features).enter().append("g")
-                .append("path")
-                .attr("d", path)
-                .attr("fill","#FFFCD1")
-                .attr("stroke","#FEB162");
+    function showAgain(selection, wifiBox, foosballBox, powerstationBox, pianoBox, storiesBox){
+        if (wifiBox.property("checked")){
+            selection = selection.filter(function(d){return (d.wifi == true); });
+        };
+        if (foosballBox.property("checked")){
+            selection = selection.filter(function(d){return (d.foosball == true); });
+        };
+        if (powerstationBox.property("checked")){
+            selection = selection.filter(function(d){return (d.powerstation == true); });
+        };
+        if (pianoBox.property("checked")){
+            selection = selection.filter(function(d){return (d.piano == true); });
+        };
+        if (storiesBox.property("checked")){
+            selection = selection.filter(function(d){return (d.stories == true); });
+        };
+        selection.transition().style("opacity", 1);
+    };
 
             var gares = svg.append("g").attr("id","gares");
             var nodes = [{
