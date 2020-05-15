@@ -28,7 +28,7 @@ function CreateGlyph(data, gare1 ,gare2) {
 				roundStrokes: false,
 				color: d3.scaleOrdinal().range(colors),
 				format: '.1f',
-				legend: {title: "Station's total score:", translateX: -100, translateY: 35},
+				legend: {title: "Satisfaction :", translateX: -100, translateY: 35},
 			};
 		};
 		
@@ -38,45 +38,5 @@ function CreateGlyph(data, gare1 ,gare2) {
 			dataset = [{}],
 			data1 = [{}],
 			data2 = [{}];
-
-		if (gare2 !== null && gare1 !== null) { // if both stations are selected
-			data.forEach(function(d){
-				if (d.Code_UIC == gare1){data1=dataPoint(d,gare1); };
-				if (d.Code_UIC == gare2){data2=dataPoint(d,gare2); };
-				dataset = data1.concat(data2);
-			});
-			let svg_radar1 = RadarChart("#radarChart", dataset, radarChartOptions([couleur1,couleur2]));
-			svg_radar1.append("text")
-		        .attr("x",+d3.select("#radarChart").attr("x")/2)
-		        .attr("y",15)
-		        .style("text-anchor","center")
-		        .text("Performance:") 
-		};
-
-		//Première station est sélectionnée
-		if (gare2 == null && gare1 !== null) {
-			data.forEach(function(d){
-				if (d.Code_UIC == gare1){dataset=dataPoint(d,gare1); };
-			});
-			let svg_radar1 = RadarChart("#radarChart", dataset, radarChartOptions([couleur1]));
-			svg_radar1.append("text")
-				.attr("x",+d3.select("#radarChart").attr("x")/2)
-				.attr("y",15)
-				.style("text-anchor","center")
-				.text("Performance:")
-		};
-
-		//Deuxième station est sélectionnée
-		if (gare1 == null && gare2 !== null) {
-			data.forEach(function(d){
-				if (d.Code_UIC == gare2){dataset = dataPoint(d,gare2); };
-			});
-			let svg_radar1 = RadarChart("#radarChart", dataset, radarChartOptions([couleur2]));
-			svg_radar1.append("text")
-				.attr("x",+d3.select("#radarChart").attr("x")/2)
-				.attr("y",15)
-				.style("text-anchor","center")
-				.text("Performance:")
-		};
 	}
 };
