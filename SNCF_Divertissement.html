@@ -109,7 +109,34 @@ d3.csv("all-joined-datasets.csv",function(data){
    							 loisirs: +d.Loisirs_vacances_visite_d_un_proche_ou_ami})
   }
 	})
+  if (gare1 == null && gare2 != null){
+    divertissements1 = divertissements2
+    acces1 = acces2
+    motif1 = motif2;
+  }
+  else if(gare1 != null && gare2 == null){
+    divertissements2 = divertissements1
+    acces2 = acces1
+    motif2 = motif1;
+  }
 
+  refreshText(data,gare1,gare2)
+  refreshDiv(divertissements1,divertissements2)
+  refreshAcces(acces1,acces2)
+  d3.selectAll("rect")
+          .attr("width",w_rect)
+          .attr("height",h_rect)
+  // utilisation des dimensions globalisées #modif
+
+
+  refreshMotif(motif1,motif2)
+  if(gare1==null){d3.selectAll("rect").style("fill",couleur2);}
+  else if(gare2==null){d3.selectAll("rect").style("fill",couleur1);}
+
+
+  ;
+
+})
   </script>
 </div>
 </body>
