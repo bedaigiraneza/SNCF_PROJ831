@@ -533,6 +533,7 @@ function refreshVelo(acc1,acc2,i){
     svg_velo.attr("x",d3.select("#valeur_velo").attr("x"))
     svg_velo.attr("y",d3.select("#valeur_velo").attr("y"))
 }
+
 function refreshMotif(mot1,mot2,gare1,gare2){
     motifSvg.selectAll("text").remove();
     motifG.selectAll("*").remove();
