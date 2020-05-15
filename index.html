@@ -277,9 +277,8 @@
                 }
             });
 
-
-            pianoBox.on("change",function(){
-                var selection =  d3.select("#gares").selectAll("circle").filter(function(d){return (d.piano == false); })
+            foosballBox.on("change",function(){
+                var selection =  d3.select("#gares").selectAll("circle").filter(function(d){return (d.foosball == false); })
                 if (d3.select(this).property("checked")){
                     filtersButton.style("display","inline-block");
                     selection
@@ -291,8 +290,8 @@
                 }
             });
 
-            storiesBox.on("change",function(){
-                var selection =  d3.select("#gares").selectAll("circle").filter(function(d){return (d.stories == false); })
+            powerstationBox.on("change",function(){
+                var selection =  d3.select("#gares").selectAll("circle").filter(function(d){return (d.powerstation == false); })
                 if (d3.select(this).property("checked")){
                     filtersButton.style("display","inline-block");
                     selection
